@@ -152,6 +152,12 @@ nav.site-nav .wrap {
   color: transparent;
 }
 
+/* "until" defaults to riding along on the second line with the rest of the
+   accent clause (.br-b stays collapsed); only below 480px does the phrase
+   stop fitting on one line at 28px, so .br-a/.br-b swap and "until" moves
+   up to the first line instead — see the 480px query below. */
+.hero h1 .br-b { display: none; }
+
 .hero p.subhead {
   font-size: 18px;
   color: var(--text2);
@@ -566,6 +572,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 @media (max-width: 1024px) and (min-width: 641px) {
   section { margin-bottom: 100px; }
   .hero { margin-bottom: 100px; }
+  .store-pill { width: 216px; height: 72px; }
 
   .feature-grid-4 { grid-template-columns: 1fr !important; justify-items: center; }
   .feature-grid-4 .feature-card { max-width: 524px !important; width: 100% !important; }
@@ -609,9 +616,11 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 }
 
 @media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
   .showcase { gap: 20px; }
   .phone { width: 220px; height: 460px; }
   .phone-2 { margin-top: 0; }
+  .store-pill { width: 192px; height: 64px; }
   .feature-row, .feature-row.reverse { flex-direction: column; gap: 32px; margin-bottom: 60px; }
   .feature-grid-4 { grid-template-columns: 1fr; column-gap: 32px; row-gap: 32px; }
   .feature-row .fr-text { text-align: left; width: 100% !important; flex: 1 1 auto !important; max-width: 100% !important; }
@@ -767,6 +776,34 @@ footer .wrap {
 
 .footer-copy { font-size: 13px; color: var(--text3); }
 
+/* Back to top */
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  /* accent at 50% opacity over white — matches the future-day dots in the
+     app's week strip (WeekView.swift DayCellView, light mode). */
+  background: #b8b1f9;
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 40;
+  box-shadow: 0 8px 20px rgba(20,20,30,0.15);
+}
+
+.to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.to-top svg { width: 22px; height: 22px; }
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-14px); }
@@ -862,4 +899,14 @@ footer .wrap {
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
   .founder-photo { margin: 0 auto; }
+}
+
+/* Below ~480px, "until it's small enough to start" no longer fits on one
+   line at 28px (measured), so drop the font a bit and swap which <br> is
+   active: "until" moves up to join the first line instead of orphaning
+   the second line into a 3rd wrapped line. */
+@media (max-width: 480px) {
+  .hero h1 { font-size: 23px; }
+  .hero h1 .br-a { display: none; }
+  .hero h1 .br-b { display: inline; }
 }
