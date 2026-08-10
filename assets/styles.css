@@ -536,14 +536,70 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 
 .showcase-caption { text-align: center; font-size: 13px; color: var(--text3); margin-top: 18px; }
 
+/* Stack cards one-under-another before the flat-mockup breakpoint kicks in.
+   Capping each card's width at the same ~524px the desktop mockups were
+   hand-positioned for (instead of letting a single grid column stretch to
+   the full container) means the fixed-px .fc-shot/.fr-shot placements still
+   read correctly here — only the grid/flex direction changes, nothing about
+   the art inside each card. */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .feature-grid-4 { grid-template-columns: 1fr; justify-items: center; }
+  .feature-grid-4 .feature-card { max-width: 524px; width: 100%; }
+
+  .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 32px; }
+  .feature-row .fr-text { text-align: center; max-width: 524px; width: 100%; }
+  .fr-visual { width: 524px; max-width: 100%; }
+}
+
 @media (max-width: 640px) {
   .showcase { gap: 20px; }
   .phone { width: 220px; height: 460px; }
   .phone-2 { margin-top: 0; }
   .feature-row, .feature-row.reverse { flex-direction: column; gap: 32px; margin-bottom: 60px; }
-  .feature-grid-4 { column-gap: 32px; row-gap: 32px; }
-  .feature-row .fr-text { text-align: center; }
-  .final-cta { flex-direction: column; text-align: center; padding: 40px 24px; }
+  .feature-grid-4 { grid-template-columns: 1fr; column-gap: 32px; row-gap: 32px; }
+  .feature-row .fr-text { text-align: center; width: 100%; flex: 1 1 auto; max-width: 100%; }
+  .fr-visual { width: 100%; flex: 1 1 auto; }
+  .final-cta { flex-direction: column; text-align: center; padding: 40px 24px; height: auto; }
+  .fc-text { max-width: 100%; }
+
+  /* Mockup art-direction (fixed px, rotated, bleeding past card edges) only
+     makes sense at the desktop width it was hand-positioned for — at this
+     breakpoint every .fc-shot/.fr-shot/.banner-shot just shows flat and
+     full-width instead of trying to rescale the same absolute coordinates. */
+  .feature-grid-4 .feature-card { overflow: hidden; }
+  .feature-grid-4 .fc-copy { max-width: 100%; }
+  .feature-grid-4 .fc-shot {
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    margin-top: 20px;
+    transform: none;
+  }
+
+  .fr-shot {
+    position: absolute;
+    inset: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    transform: none;
+  }
+
+  .fc-visual { width: 100%; height: 320px; }
+  .banner-shot {
+    position: static;
+    width: 100%;
+    height: auto;
+    max-width: 320px;
+    margin: 0 auto;
+    display: block;
+  }
+  .fc-shadow { display: none; }
 }
 
 /* Founder section */
