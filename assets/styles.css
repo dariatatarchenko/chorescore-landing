@@ -575,6 +575,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 @media (max-width: 1024px) and (min-width: 641px) {
   section { margin-bottom: 70px; }
   .hero { margin-bottom: 70px; }
+  .hero p.subhead { font-size: 16px; }
   .store-pill { width: 216px; height: 72px; }
 
   .feature-grid-4 { grid-template-columns: 1fr !important; justify-items: center; }
@@ -897,6 +898,7 @@ footer .wrap {
   .benefits { grid-template-columns: 1fr; }
   .hero { padding: 0; margin-top: 48px; margin-bottom: 48px; }
   .hero h1 { font-size: 28px; }
+  .hero p.subhead { font-size: 16px; }
   .hero h1 .br-a { display: inline; }
   section { padding: 64px 0; margin-bottom: 48px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
