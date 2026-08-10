@@ -565,12 +565,13 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    the art inside each card. */
 @media (max-width: 1024px) and (min-width: 641px) {
   section { margin-bottom: 100px; }
+  .hero { margin-bottom: 100px; }
 
   .feature-grid-4 { grid-template-columns: 1fr !important; justify-items: center; }
   .feature-grid-4 .feature-card { max-width: 524px !important; width: 100% !important; }
 
   .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 32px; }
-  .feature-row .fr-text { text-align: center; max-width: 524px !important; width: 100% !important; flex: none !important; }
+  .feature-row .fr-text { text-align: left; max-width: 524px !important; width: 100% !important; flex: none !important; }
   .fr-visual { width: 524px !important; max-width: 100%; flex: none !important; }
 }
 
@@ -581,13 +582,28 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .final-cta { flex-direction: column; text-align: center; padding: 40px 24px; height: auto; }
   .fc-text { max-width: 100% !important; }
   .fc-visual { display: none; }
-  .banner-shot {
-    position: static !important;
-    width: 100% !important;
+
+  /* banner.png has a lot of transparent margin baked into the file around the
+     phones (real content is roughly the 1106x1237 region inside the
+     1858x1725 canvas) — desktop crops that via hand-positioned px on
+     .banner-shot itself, but here we crop it with a wrapper instead so the
+     phones fill the card width and bleed slightly past its edge, matching
+     the other mockup cards, without touching the source file desktop relies on. */
+  .banner-shot-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: calc(100% + 64px);
+    margin: 0 -32px;
+    aspect-ratio: 1106 / 1237;
+    overflow: hidden;
+  }
+  .banner-shot-wrap .banner-shot {
+    position: absolute !important;
+    left: -28.75% !important;
+    top: -24.33% !important;
+    width: 167.99% !important;
     height: auto !important;
-    max-width: 320px;
-    margin: 0 auto;
-    display: block;
+    max-width: none !important;
   }
   .fc-shadow { display: none; }
 }
@@ -598,7 +614,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .phone-2 { margin-top: 0; }
   .feature-row, .feature-row.reverse { flex-direction: column; gap: 32px; margin-bottom: 60px; }
   .feature-grid-4 { grid-template-columns: 1fr; column-gap: 32px; row-gap: 32px; }
-  .feature-row .fr-text { text-align: center; width: 100% !important; flex: 1 1 auto !important; max-width: 100% !important; }
+  .feature-row .fr-text { text-align: left; width: 100% !important; flex: 1 1 auto !important; max-width: 100% !important; }
   .fr-visual { width: 100% !important; flex: 1 1 auto !important; }
 
   /* Perk-card mockups (.fc-shot) are hand-positioned fixed px that only make
@@ -689,6 +705,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   height: 482px;
   box-sizing: border-box;
   position: relative;
+  overflow: hidden;
 }
 
 .fc-text { flex: 1; min-width: 0; max-width: 50%; }
@@ -840,7 +857,7 @@ footer .wrap {
   nav.site-nav.nav-open .nav-links { display: flex; }
   .feature-grid { grid-template-columns: 1fr; }
   .benefits { grid-template-columns: 1fr; }
-  .hero { padding: 64px 0 48px; }
+  .hero { padding: 64px 0 48px; margin-bottom: 60px; }
   .hero h1 { font-size: 28px; }
   section { padding: 64px 0; margin-bottom: 60px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
