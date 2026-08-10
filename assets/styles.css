@@ -579,7 +579,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    way the repeating cards do (nothing else to cap its width against) — it
    goes flat as soon as the desktop-only absolute coordinates stop fitting. */
 @media (max-width: 1024px) {
-  .final-cta { flex-direction: column; text-align: center; padding: 40px 24px; height: auto; }
+  .final-cta { flex-direction: column !important; text-align: center !important; padding: 40px 24px 0 !important; height: auto !important; }
   .fc-text { max-width: 100% !important; }
   .fc-visual { display: none; }
 
@@ -592,10 +592,10 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .banner-shot-wrap {
     position: relative;
     flex-shrink: 0;
-    width: calc(100% + 64px);
-    margin: 0 -32px;
+    width: 100%;
     aspect-ratio: 1106 / 1237;
     overflow: hidden;
+    margin-bottom: -5.6%;
   }
   .banner-shot-wrap .banner-shot {
     position: absolute !important;
@@ -705,7 +705,6 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   height: 482px;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
 }
 
 .fc-text { flex: 1; min-width: 0; max-width: 50%; }
