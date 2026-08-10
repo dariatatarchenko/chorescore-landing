@@ -19,6 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   reveals.forEach((el) => observer.observe(el));
+
+  // Safety net: a reveal element that never intersects (stuck opacity:0 for
+  // any reason — odd viewport height, an observer that never fires) still
+  // takes up its normal layout space, which reads as a large blank gap
+  // between the sections around it. Force everything visible after a beat
+  // regardless of scroll/intersection state.
+  setTimeout(() => reveals.forEach((el) => el.classList.add('is-visible')), 1500);
 });
 
 document.addEventListener('DOMContentLoaded', () => {

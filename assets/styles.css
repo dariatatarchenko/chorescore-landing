@@ -168,6 +168,8 @@ nav.site-nav .wrap {
   margin: 20px auto 0;
 }
 
+.hero p.subhead .sub-br { display: none; }
+
 .hero-cta {
   margin-top: 40px;
   display: flex;
@@ -898,7 +900,8 @@ footer .wrap {
   .benefits { grid-template-columns: 1fr; }
   .hero { padding: 0; margin-top: 48px; margin-bottom: 48px; }
   .hero h1 { font-size: 28px; }
-  .hero p.subhead { font-size: 16px; }
+  .hero p.subhead { font-size: 14px; }
+  .hero p.subhead .sub-br { display: inline; }
   .hero h1 .br-a { display: inline; }
   section { padding: 64px 0; margin-bottom: 48px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
