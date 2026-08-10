@@ -20,3 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   reveals.forEach((el) => observer.observe(el));
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.querySelector('nav.site-nav');
+  const burger = document.querySelector('.nav-burger');
+  if (!nav || !burger) return;
+
+  const closeMenu = () => {
+    nav.classList.remove('nav-open');
+    burger.setAttribute('aria-expanded', 'false');
+  };
+
+  burger.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('nav-open');
+    burger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  nav.querySelectorAll('.nav-links a').forEach((a) => a.addEventListener('click', closeMenu));
+});

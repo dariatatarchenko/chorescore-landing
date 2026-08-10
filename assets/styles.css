@@ -105,6 +105,28 @@ nav.site-nav .wrap {
 
 .pill .dot { display: none; }
 
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.nav-burger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text1);
+}
+
 /* Hero */
 .hero {
   position: relative;
@@ -356,41 +378,40 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   z-index: 0;
 }
 
+/* Left/top/width are percentages of the (always-square) .fr-backdrop, derived
+   from the original hand-positioned px values at the 524px desktop reference
+   width. Percentages keep the exact same crop/zoom framing at any card size
+   instead of needing a per-breakpoint override. */
 .fr-shot-1 {
-  left: -197px;
-  top: -45px;
-  width: 916.98px;
-  height: 916.98px;
+  left: -37.6%;
+  top: -8.59%;
+  width: 175%;
   transform: rotate(2.73deg);
 }
 
 .fr-shot-2 {
-  left: -133px;
-  top: -76px;
-  width: 791.06px;
-  height: 791.06px;
+  left: -25.38%;
+  top: -14.5%;
+  width: 150.97%;
 }
 
 .fr-shot-3 {
-  left: -152px;
-  top: -401px;
-  width: 1026.44px;
-  height: 1026.44px;
+  left: -29.01%;
+  top: -76.53%;
+  width: 195.89%;
 }
 
 .fr-shot-4 {
-  left: -203px;
-  top: -55px;
-  width: 915px;
-  height: 915px;
+  left: -38.74%;
+  top: -10.5%;
+  width: 174.62%;
   transform: rotate(-3.71deg);
 }
 
 .fr-shot-5 {
-  left: -153px;
-  top: -263px;
-  width: 855.84px;
-  height: 855.84px;
+  left: -29.2%;
+  top: -50.19%;
+  width: 163.33%;
 }
 
 .fr-shape { position: absolute; z-index: 0; pointer-events: none; }
@@ -543,6 +564,8 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    read correctly here — only the grid/flex direction changes, nothing about
    the art inside each card. */
 @media (max-width: 1024px) and (min-width: 641px) {
+  section { margin-bottom: 100px; }
+
   .feature-grid-4 { grid-template-columns: 1fr !important; justify-items: center; }
   .feature-grid-4 .feature-card { max-width: 524px !important; width: 100% !important; }
 
@@ -557,7 +580,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 @media (max-width: 1024px) {
   .final-cta { flex-direction: column; text-align: center; padding: 40px 24px; height: auto; }
   .fc-text { max-width: 100% !important; }
-  .fc-visual { width: 100%; height: 320px; }
+  .fc-visual { display: none; }
   .banner-shot {
     position: static !important;
     width: 100% !important;
@@ -578,12 +601,12 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .feature-row .fr-text { text-align: center; width: 100% !important; flex: 1 1 auto !important; max-width: 100% !important; }
   .fr-visual { width: 100% !important; flex: 1 1 auto !important; }
 
-  /* Mockup art-direction (fixed px, rotated, bleeding past card edges) only
-     makes sense at the desktop width it was hand-positioned for — at this
-     breakpoint every .fc-shot/.fr-shot just shows flat and full-width
-     instead of trying to rescale the same absolute coordinates. The
-     !important pins beat .corner/.tilt-3/.tilt-4/.fr-shot-N, which are all
-     more specific than a plain class selector could be here. */
+  /* Perk-card mockups (.fc-shot) are hand-positioned fixed px that only make
+     sense at the desktop width they were designed for, so at this breakpoint
+     they go flat and full-width instead. .fr-shot (showcase mockups) doesn't
+     need an override here: its left/top/width are already percentages of
+     the square .fr-backdrop, so the same crop/zoom framing as desktop just
+     scales down automatically. */
   .feature-grid-4 .feature-card { overflow: hidden; }
   .feature-grid-4 .fc-copy { max-width: 100% !important; }
   .feature-grid-4 .fc-shot {
@@ -597,17 +620,6 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     right: auto !important;
     bottom: auto !important;
     margin-top: 20px !important;
-    transform: none !important;
-  }
-
-  .fr-shot {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    object-fit: cover;
     transform: none !important;
   }
 }
@@ -809,12 +821,29 @@ footer .wrap {
 }
 
 @media (max-width: 640px) {
-  .nav-links { display: none; }
+  .nav-right { gap: 12px; }
+  .nav-burger { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    padding: 8px 24px 16px;
+    box-shadow: 0 12px 24px rgba(20,20,30,0.1);
+  }
+  .nav-links a { padding: 12px 0; text-align: center; }
+  nav.site-nav.nav-open .nav-links { display: flex; }
   .feature-grid { grid-template-columns: 1fr; }
   .benefits { grid-template-columns: 1fr; }
   .hero { padding: 64px 0 48px; }
-  section { padding: 64px 0; }
+  .hero h1 { font-size: 28px; }
+  section { padding: 64px 0; margin-bottom: 60px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
-  .founder { grid-template-columns: 1fr; text-align: center; padding: 32px 24px; }
+  .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
   .founder-photo { margin: 0 auto; }
 }
