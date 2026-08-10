@@ -909,12 +909,18 @@ footer .wrap {
   .founder-photo { margin: 0 auto; }
 }
 
-/* Below ~480px, "until it's small enough to start" no longer fits on one
-   line at 28px (measured), so drop the font a bit and swap which <br> is
-   active: "until" moves up to join the first line instead of orphaning
-   the second line into a 3rd wrapped line. */
-@media (max-width: 480px) {
-  .hero h1 { font-size: 23px; }
+/* Below ~399px, "until it's small enough to start" no longer fits on one
+   line at 28px (measured against the real rendered font, not estimated),
+   so swap which <br> is active: "until" moves up to join the first line
+   instead of orphaning the second line into a 3rd wrapped line. 28px still
+   fits both lines of that narrower arrangement down to ~375px; below that
+   (very small phones, e.g. 320px) even the shorter lines stop fitting at
+   28px, so drop to 23px too. */
+@media (max-width: 398px) {
   .hero h1 .br-a { display: none; }
   .hero h1 .br-b { display: inline; }
+}
+
+@media (max-width: 374px) {
+  .hero h1 { font-size: 23px; }
 }
