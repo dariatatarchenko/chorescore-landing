@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChoreScore: break big tasks into pieces you can actually start</title>
+<meta name="description" content="Split anything overwhelming (chores, work, pet care) into steps as small as you need. Zones, points and streaks. Built solo, coming soon to iOS.">
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<svg style="display:none">
+  <defs>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.5 5.4 5.9.7-4.3 4.1 1.1 5.8-5.2-2.9-5.2 2.9 1.1-5.8-4.3-4.1 5.9-.7z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0115 4v1H9zM8.5 13l2.2 2.2L15.5 11"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2.4M12 18.1v2.4M20.5 12h-2.4M5.9 12H3.5M17.7 6.3l-1.7 1.7M8 16l-1.7 1.7M17.7 17.7L16 16M8 8L6.3 6.3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.7-9.8-9.4C.8 7.2 2.6 4 6 4c2 0 3.4 1 6 3.6C14.6 5 16 4 18 4c3.4 0 5.2 3.2 3.8 6.6C19.5 15.3 12 20 12 20z"/></symbol>
+    <symbol id="i-zone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6.5L20 11"/><path d="M6 10v9a1 1 0 001 1h10a1 1 0 001-1v-9"/></symbol>
+  </defs>
+</svg>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <img src="assets/icon-mark-120.png" alt="ChoreScore icon">
+      ChoreScore
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#showcase">Features</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+      <span class="pill"><span class="dot"></span> Coming soon</span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="sparkle" style="top:18%; left:8%; width:34px; height:34px; animation-delay:0.4s;">
+    <svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 40c0-9.6-10-19.6-20-20 10-0.4 20-10.4 20-20 0 9.6 10 19.6 20 20-10 0.4-20 10.4-20 20Z"/></svg>
+  </div>
+  <div class="sparkle" style="top:12%; right:12%; width:22px; height:22px; animation-delay:1.6s;">
+    <svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 40c0-9.6-10-19.6-20-20 10-0.4 20-10.4 20-20 0 9.6 10 19.6 20 20-10 0.4-20 10.4-20 20Z"/></svg>
+  </div>
+  <div class="sparkle" style="bottom:8%; left:16%; width:18px; height:18px; animation-delay:0.9s;">
+    <svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 40c0-9.6-10-19.6-20-20 10-0.4 20-10.4 20-20 0 9.6 10 19.6 20 20-10 0.4-20 10.4-20 20Z"/></svg>
+  </div>
+
+  <div class="wrap">
+    <h1>Big and overwhelming, until it's <span class="accent">small enough to start</span></h1>
+    <p class="subhead">Break anything overwhelming (chores, work, pet care) into steps as small as you need. It still counts</p>
+    <div class="hero-cta">
+      <img class="store-pill" src="assets/appstore-badge.svg" alt="Download on the App Store">
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="feature-grid-4">
+      <div class="feature-card reveal">
+        <div class="fc-copy">
+          <h3>Less to remember</h3>
+          <p>Set a task to repeat daily, weekly or on your own schedule, and stop holding it in your head</p>
+        </div>
+        <img class="fc-shot corner" src="assets/perks/perk1.png" alt="Task cards showing Weekly and Mon Thu repeat schedules">
+      </div>
+      <div class="feature-card reveal" style="transition-delay:0.05s">
+        <div class="fc-copy">
+          <h3>Share the load</h3>
+          <p>Reassign or edit any task in a tap. Hand it to whoever has time, no hard feelings, just helping each other out</p>
+        </div>
+        <img class="fc-shot" src="assets/perks/perk2.png" alt="Assigned To row showing Emma and Jake selected">
+      </div>
+      <div class="feature-card reveal" style="transition-delay:0.1s">
+        <div class="fc-copy">
+          <h3>Watch it add up</h3>
+          <p>Points, levels and a household leaderboard keep your streak going, so the progress actually shows</p>
+        </div>
+        <img class="fc-shot tilt-3" src="assets/perks/perk3.png" alt="Top performer and Dream Team banners with streak and all-time stats">
+      </div>
+      <div class="feature-card reveal" style="transition-delay:0.15s">
+        <div class="fc-copy">
+          <h3>Have fun with it</h3>
+          <p>Assign a task to anyone in the house, including "hug your partner." Not everything has to be a chore</p>
+        </div>
+        <img class="fc-shot tilt-4" src="assets/perks/perk4.png" alt="Just Because zone tasks including Hug your partner">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="showcase">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Features</span>
+      <h2>Turns a boring routine into something <span class="grad-text">weirdly addictive</span></h2>
+    </div>
+
+    <div class="feature-row reveal">
+      <div class="fr-text">
+        <h3>Start with your zones</h3>
+        <p>Kitchen, work, the dog. Split everything into whatever areas make sense before it turns into one endless list</p>
+      </div>
+      <div class="fr-visual">
+        <div class="fr-backdrop fr-backdrop-mint">
+          <div class="fr-shape circle" style="width:173px;height:173px;top:62px;left:-20px;background:#5EF9B0;opacity:0.225;"></div>
+          <div class="fr-shape ring" style="width:160px;height:160px;bottom:10%;right:8%;color:#6388FF;opacity:0.25;"></div>
+          <div class="fr-shape square" style="width:70px;height:70px;top:36%;right:10%;background:#7163F3;opacity:0.15;"></div>
+          <img class="fr-shot fr-shot-1" src="assets/feats/feat1.png" alt="Zones list showing Kitchen, Bathroom, Living Room and more">
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse reveal">
+      <div class="fr-text">
+        <h3>Set it once, forget it exists</h3>
+        <p>Daily, weekly, every third Tuesday: pick a frequency and stop being the household's human calendar</p>
+      </div>
+      <div class="fr-visual">
+        <div class="fr-backdrop fr-backdrop-purple">
+          <div class="fr-shape ring" style="width:140px;height:140px;top:8%;right:58px;color:#5EF9B0;opacity:0.225;"></div>
+          <div class="fr-shape circle" style="width:120px;height:120px;bottom:12%;left:10%;background:#7B61FF;opacity:0.2;"></div>
+          <div class="fr-shape square" style="width:60px;height:60px;top:44%;left:12%;background:#6388FF;opacity:0.15;"></div>
+          <img class="fr-shot fr-shot-2" src="assets/feats/feat2.png" alt="New Task form with repeat schedule and times per day">
+        </div>
+      </div>
+    </div>
+    <div class="feature-row reveal">
+      <div class="fr-text">
+        <h3>Hand it off without the guilt trip</h3>
+        <p>Running behind on something? Tap reassign and someone else picks it up. That's what having backup is for</p>
+      </div>
+      <div class="fr-visual">
+        <div class="fr-backdrop fr-backdrop-mint">
+          <div class="fr-shape circle" style="width:150px;height:150px;top:-30px;left:-40px;background:#5EF9B0;opacity:0.225;"></div>
+          <div class="fr-shape ring" style="width:120px;height:120px;bottom:44px;right:-16px;color:#6388FF;opacity:0.25;"></div>
+          <div class="fr-shape square" style="width:70px;height:70px;top:42%;left:60px;background:#7163F3;opacity:0.15;"></div>
+          <img class="fr-shot fr-shot-3" src="assets/feats/feat3.png" alt="Reassign to row showing Anya, Misha and Kid chips">
+        </div>
+      </div>
+    </div>
+    <div class="feature-row reverse reveal">
+      <div class="fr-text">
+        <h3>A little support goes a long way</h3>
+        <p>Heart a task to tell someone "nice job", like when they actually make the bed properly</p>
+      </div>
+      <div class="fr-visual">
+        <div class="fr-backdrop fr-backdrop-mint">
+          <div class="fr-shape circle" style="width:150px;height:150px;top:34px;left:-40px;background:#5EF9B0;opacity:0.225;"></div>
+          <div class="fr-shape ring" style="width:120px;height:120px;bottom:12px;right:16px;color:#6388FF;opacity:0.25;"></div>
+          <div class="fr-shape square" style="width:70px;height:70px;top:42%;right:14%;background:#7163F3;opacity:0.15;"></div>
+          <img class="fr-shot fr-shot-4" src="assets/feats/feat4.png" alt="Task cards with a liked heart on Made the bed">
+        </div>
+      </div>
+    </div>
+    <div class="feature-row reveal">
+      <div class="fr-text">
+        <h3>Effort finally shows</h3>
+        <p>A household leaderboard, Hot Zones and streaks, so nobody's quietly doing more than everyone thinks</p>
+      </div>
+      <div class="fr-visual">
+        <div class="fr-backdrop fr-backdrop-purple">
+          <div class="fr-shape circle" style="width:150px;height:150px;bottom:-20px;right:-20px;background:#7B61FF;opacity:0.1;"></div>
+          <div class="fr-shape square" style="width:60px;height:60px;top:44%;left:12%;background:#5EF9B0;opacity:0.15;"></div>
+          <img class="fr-shot fr-shot-5" src="assets/feats/feat5.png" alt="Hall of Fame leaderboard with Hot Zones progress bars">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="founder">
+  <div class="wrap">
+    <div class="founder reveal">
+      <div class="founder-photo">
+        <img src="assets/founder.jpg" alt="Daria, the person who builds ChoreScore">
+      </div>
+      <div class="founder-copy">
+        <span class="eyebrow">Who's behind this</span>
+        <h2>Hi, I'm Daria. I built this myself</h2>
+        <p>No team, no office, no roadmap meetings. Just me, building the tool I actually wanted: a way to take one big, vague task and turn it into pieces small enough that starting doesn't feel impossible.</p>
+        <p>It started as a chores app, but zones work for anything piling up: work, pet care, whatever's been sitting on a list too long. I designed it, wrote the code, and I'm the one who reads your feedback if you send it</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="final-cta reveal">
+      <div class="fc-text">
+        <h2>Almost ready to make your&nbsp;list a little lighter</h2>
+        <p>A one-woman band, doing her best to get this right.<br>Check&nbsp;back&nbsp;soon</p>
+        <img class="store-pill" src="assets/appstore-badge.svg" alt="Download on the App Store">
+      </div>
+      <div class="fc-visual"></div>
+      <div class="fc-shadow"></div>
+      <img class="banner-shot" src="assets/banner.png" alt="ChoreScore app screens with App Store button">
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-left">
+      <span class="footer-copy">© 2026 ChoreScore</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>
