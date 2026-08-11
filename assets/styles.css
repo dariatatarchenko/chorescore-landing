@@ -576,7 +576,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    the art inside each card. */
 @media (max-width: 1024px) and (min-width: 641px) {
   section { margin-bottom: 70px; }
-  .hero { margin-bottom: 70px; }
+  .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
   .hero p.subhead { font-size: 16px; }
   .store-pill { width: 216px; height: 72px; }
 
@@ -586,6 +586,11 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 32px; }
   .feature-row .fr-text { text-align: left; max-width: 524px !important; width: 100% !important; flex: none !important; }
   .fr-visual { width: 524px !important; max-width: 100%; flex: none !important; }
+
+  /* .founder never got a tablet-range rule, so it fell through to the
+     desktop 200px-photo-column grid at widths too narrow for it. */
+  .founder { grid-template-columns: 1fr !important; text-align: left !important; }
+  .founder-photo { margin: 0 auto; }
 }
 
 /* The final-cta banner has no "keep the art, just resize" middle state the
@@ -904,11 +909,6 @@ footer .wrap {
   .hero p.subhead .sub-br { display: inline; }
   .hero h1 .br-a { display: inline; }
   section { padding: 0; margin-bottom: 48px; }
-  /* Sparkles are positioned as % of .hero's own box (App design, not mine
-     to rewrite here); now that the hero has no padding, its box is short
-     enough on mobile that those percentages land on top of the headline
-     text instead of around it. */
-  .sparkle { display: none; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
   .founder-photo { margin: 0 auto; }
