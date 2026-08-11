@@ -903,7 +903,12 @@ footer .wrap {
   .hero p.subhead { font-size: 14px; }
   .hero p.subhead .sub-br { display: inline; }
   .hero h1 .br-a { display: inline; }
-  section { padding: 64px 0; margin-bottom: 48px; }
+  section { padding: 0; margin-bottom: 48px; }
+  /* Sparkles are positioned as % of .hero's own box (App design, not mine
+     to rewrite here); now that the hero has no padding, its box is short
+     enough on mobile that those percentages land on top of the headline
+     text instead of around it. */
+  .sparkle { display: none; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
   .founder-photo { margin: 0 auto; }
