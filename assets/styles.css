@@ -356,7 +356,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   box-sizing: border-box;
 }
 
-.feature-row .fr-text h3 { font-size: 26px; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; color: var(--text1); margin: 0 0 16px; }
+.feature-row .fr-text h3 { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; color: var(--text1); margin: 0 0 16px; }
 .feature-row .fr-text p { font-size: 16px; line-height: 1.6; color: var(--text2); }
 
 .fr-visual { flex: 0 0 calc(50% - 12px); width: calc(50% - 12px); display: flex; }
