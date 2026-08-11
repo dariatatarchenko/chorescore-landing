@@ -947,10 +947,18 @@ footer .wrap {
    h1 at its smaller mobile sizes. Keep every tier a few px under h1's. */
 @media (max-width: 374px) {
   .section-head h2, .final-cta h2 { font-size: 20px; }
+  /* h3 (card headings) and .founder-copy h2 are flat sizes with no
+     breakpoint of their own — at this tier they'd otherwise beat both h1
+     (23px) and the h2s above (20px). Keep them a step down, never below
+     18px (body text is 16px, so this is body+2, the smallest a heading
+     should ever get). */
+  .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 19px; }
+  .founder-copy h2 { font-size: 20px; }
 }
 
 @media (min-width: 375px) and (max-width: 479px) {
   .section-head h2, .final-cta h2 { font-size: 24px; }
+  .feature-row .fr-text h3 { font-size: 22px; }
 }
 
 @media (min-width: 480px) and (max-width: 559px) {
