@@ -245,6 +245,8 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   color: var(--text1);
 }
 
+.section-head h2 .h2-br-narrow { display: none; }
+
 .section-head p {
   font-size: 16px;
   color: var(--text2);
@@ -946,7 +948,14 @@ footer .wrap {
    otherwise floor out at clamp()'s 26-28px minimum, which ties or beats
    h1 at its smaller mobile sizes. Keep every tier a few px under h1's. */
 @media (max-width: 374px) {
-  .section-head h2, .final-cta h2 { font-size: 20px; }
+  .final-cta h2 { font-size: 20px; }
+  /* "Turns a boring routine into something" doesn't fit one line at any
+     size that still beats body+2px down here, even at 320px — swap to an
+     earlier break ("...into" / "something weirdly addictive") instead,
+     verified against the real rendered width down to 320px. */
+  .section-head h2 { font-size: 21px; }
+  .section-head h2 .h2-br-narrow { display: inline; }
+  .section-head h2 .h2-br-default { display: none; }
   /* h3 (card headings) and .founder-copy h2 are flat sizes with no
      breakpoint of their own — at this tier they'd otherwise beat both h1
      (23px) and the h2s above (20px). Keep them a step down, never below
@@ -957,14 +966,17 @@ footer .wrap {
 }
 
 @media (min-width: 375px) and (max-width: 479px) {
-  .section-head h2, .final-cta h2 { font-size: 24px; }
+  .final-cta h2 { font-size: 24px; }
+  .section-head h2 { font-size: 19px; }
   .feature-row .fr-text h3 { font-size: 22px; }
 }
 
 @media (min-width: 480px) and (max-width: 559px) {
-  .section-head h2, .final-cta h2 { font-size: 28px; }
+  .final-cta h2 { font-size: 28px; }
+  .section-head h2 { font-size: 25px; }
 }
 
 @media (min-width: 560px) and (max-width: 640px) {
-  .section-head h2, .final-cta h2 { font-size: 34px; }
+  .final-cta h2 { font-size: 34px; }
+  .section-head h2 { font-size: 30px; }
 }
