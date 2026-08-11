@@ -903,15 +903,27 @@ footer .wrap {
   nav.site-nav.nav-open .nav-links { display: flex; }
   .feature-grid { grid-template-columns: 1fr; }
   .benefits { grid-template-columns: 1fr; }
-  .hero { padding: 0; margin-top: 60px; margin-bottom: 60px; }
+  .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
   .hero h1 { font-size: 28px; }
   .hero p.subhead { font-size: 16px; }
   .hero p.subhead .sub-br { display: inline; }
   .hero h1 .br-a { display: inline; }
-  section { padding: 0; margin-bottom: 60px; }
+  section { padding: 0; margin-bottom: 70px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
   .founder-photo { margin: 0 auto; }
+}
+
+/* h1 at a flat 28px leaves a lot of unused width on wider phones — bump it
+   in two more steps as width grows, each verified against the real
+   rendered width of "until it's small enough to start" (the binding line)
+   so it still holds to exactly 2 lines. */
+@media (min-width: 480px) and (max-width: 559px) {
+  .hero h1 { font-size: 33px; }
+}
+
+@media (min-width: 560px) and (max-width: 640px) {
+  .hero h1 { font-size: 40px; }
 }
 
 /* Below ~399px, "until it's small enough to start" no longer fits on one
@@ -928,4 +940,23 @@ footer .wrap {
 
 @media (max-width: 374px) {
   .hero h1 { font-size: 23px; }
+}
+
+/* h1 is the largest heading on the page by design — on mobile these h2s
+   otherwise floor out at clamp()'s 26-28px minimum, which ties or beats
+   h1 at its smaller mobile sizes. Keep every tier a few px under h1's. */
+@media (max-width: 374px) {
+  .section-head h2, .final-cta h2 { font-size: 20px; }
+}
+
+@media (min-width: 375px) and (max-width: 479px) {
+  .section-head h2, .final-cta h2 { font-size: 24px; }
+}
+
+@media (min-width: 480px) and (max-width: 559px) {
+  .section-head h2, .final-cta h2 { font-size: 28px; }
+}
+
+@media (min-width: 560px) and (max-width: 640px) {
+  .section-head h2, .final-cta h2 { font-size: 34px; }
 }
