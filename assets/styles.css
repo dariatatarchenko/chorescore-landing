@@ -80,7 +80,7 @@ nav.site-nav .wrap {
   display: flex;
   align-items: center;
   gap: 40px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text2);
 }
@@ -96,7 +96,7 @@ nav.site-nav .wrap {
   height: 38px;
   padding: 0 18px;
   border-radius: 11px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   background: var(--accent);
   color: #fff;
@@ -232,7 +232,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 
 .eyebrow {
   display: inline-block;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 14px;
@@ -690,7 +690,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 
 .founder-copy .eyebrow { margin-bottom: 8px; }
 .founder-copy h2 { font-size: 24px; line-height: 1.15; margin-bottom: 14px; }
-.founder-copy p { font-size: 15.5px; color: var(--text2); margin: 0 0 12px; }
+.founder-copy p { font-size: 16px; color: var(--text2); margin: 0 0 12px; }
 .founder-copy p:last-child { margin-bottom: 0; }
 .founder-copy strong { color: var(--text1); }
 
@@ -779,13 +779,13 @@ footer .wrap {
 .footer-links {
   display: flex;
   gap: 24px;
-  font-size: 13.5px;
+  font-size: 16px;
   color: var(--text2);
 }
 
 .footer-links a:hover { color: var(--accent); }
 
-.footer-copy { font-size: 13px; color: var(--text3); }
+.footer-copy { font-size: 16px; color: var(--text3); }
 
 /* Back to top */
 .to-top {
@@ -827,7 +827,7 @@ footer .wrap {
 }
 
 .legal h1 { font-size: 32px; }
-.legal .updated { font-size: 13.5px; color: var(--text3); margin-top: 10px; }
+.legal .updated { font-size: 16px; color: var(--text3); margin-top: 10px; }
 
 .legal h2 {
   font-size: 19px;
@@ -836,7 +836,7 @@ footer .wrap {
   color: var(--text1);
 }
 
-.legal p, .legal li { font-size: 15px; color: var(--text2); }
+.legal p, .legal li { font-size: 16px; color: var(--text2); }
 .legal ul { padding-left: 20px; }
 .legal li { margin-bottom: 6px; }
 
@@ -846,7 +846,7 @@ footer .wrap {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text2);
   margin-bottom: 8px;
 }
@@ -864,7 +864,7 @@ footer .wrap {
 
 .legal-toc a {
   display: block;
-  font-size: 13.5px;
+  font-size: 16px;
   color: var(--text2);
   padding: 4px 0;
   break-inside: avoid;
@@ -905,7 +905,7 @@ footer .wrap {
   .benefits { grid-template-columns: 1fr; }
   .hero { padding: 0; margin-top: 60px; margin-bottom: 60px; }
   .hero h1 { font-size: 28px; }
-  .hero p.subhead { font-size: 14px; }
+  .hero p.subhead { font-size: 16px; }
   .hero p.subhead .sub-br { display: inline; }
   .hero h1 .br-a { display: inline; }
   section { padding: 0; margin-bottom: 60px; }
