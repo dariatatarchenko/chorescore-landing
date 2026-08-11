@@ -44,6 +44,8 @@ img { max-width: 100%; display: block; }
   padding: 0 24px;
 }
 
+.no-split { white-space: nowrap; }
+
 /* Nav */
 nav.site-nav {
   position: sticky;
