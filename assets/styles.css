@@ -935,11 +935,12 @@ footer .wrap {
    continuously through T3-T6 without needing their own overrides — the
    fixed steps below exist only because clamp() floors out at its minimum
    below ~700px viewport, which this ≤479 tier compensates for. With no
-   forced <br> anymore, "until it's small enough to start" (the no-split
-   unit plus "until" before it) needs 26px or smaller to stay on one line
-   at the 360px floor — verified word-by-word, not estimated. */
+   forced <br> anymore, "until" is inside the no-split unit too (so it
+   prefers joining line 2 over orphaning line 1) — that whole unit needs
+   25px or smaller to stay on one line at the 360px floor, verified
+   word-by-word, not estimated. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: 26px; }
+  .hero h1 { font-size: 25px; }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
