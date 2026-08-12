@@ -154,23 +154,12 @@ nav.site-nav .wrap {
   color: transparent;
 }
 
-/* Both manual breaks are off by default — desktop/tablet just wrap
-   naturally at their much wider clamp()'d font/max-width. Only the ≤640px
-   mobile query turns .br-a on (forcing "Big and overwhelming," onto its
-   own line); below 480px "until it's small enough to start" stops fitting
-   on one line at 28px, so .br-a/.br-b swap and "until" moves up to join
-   the first line instead. */
-.hero h1 .br-a,
-.hero h1 .br-b { display: none; }
-
 .hero p.subhead {
   font-size: 18px;
   color: var(--text2);
   max-width: 560px;
   margin: 20px auto 0;
 }
-
-.hero p.subhead .sub-br { display: none; }
 
 .hero-cta {
   margin-top: 40px;
@@ -246,8 +235,6 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   letter-spacing: -0.01em;
   color: var(--text1);
 }
-
-.section-head h2 .h2-br-narrow { display: none; }
 
 .section-head p {
   font-size: 16px;
@@ -572,57 +559,63 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 
 .showcase-caption { text-align: center; font-size: 13px; color: var(--text3); margin-top: 18px; }
 
+/* Breakpoint scale — snap new responsive work to these five cutoffs
+   instead of inventing new ones:
+     <360      T1  smallest phones
+     360–479   T2  phones
+     480–767   T3  large phones / small tablets
+     768–959   T4  tablets
+     960–1199  T5  small desktop / laptop
+     ≥1200     T6  desktop (base, unqueried styles below)
+   Referenced here as max-width cutoffs (359/479/767/959/1199) to match
+   this file's desktop-first cascade. */
+
 /* Stack cards one-under-another before the flat-mockup breakpoint kicks in.
    Capping each card's width at the same ~524px the desktop mockups were
    hand-positioned for (instead of letting a single grid column stretch to
    the full container) means the fixed-px .fc-shot/.fr-shot placements still
    read correctly here — only the grid/flex direction changes, nothing about
-   the art inside each card. */
-@media (max-width: 1024px) and (min-width: 641px) {
+   the art inside each card. Also covers the final-cta banner, which has no
+   "keep the art, just resize" middle state (nothing else to cap its width
+   against) — it goes flat as soon as the desktop-only absolute coordinates
+   stop fitting. */
+@media (max-width: 1199px) {
   section { margin-bottom: 70px; }
   .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
   .hero p.subhead { font-size: 16px; }
   .store-pill { width: 216px; height: 72px; }
 
-  .feature-grid-4 { grid-template-columns: 1fr !important; justify-items: center; row-gap: 20px !important; }
-  .feature-grid-4 .feature-card { max-width: 524px !important; width: 100% !important; padding: 24px !important; border-radius: 20px !important; min-height: 0 !important; }
+  .feature-grid-4 { grid-template-columns: 1fr; justify-items: center; row-gap: 20px; }
+  .feature-grid-4 .feature-card { max-width: 524px; width: 100%; padding: 24px; border-radius: 20px; min-height: 0; overflow: hidden; }
   .feature-grid-4 .feature-card h3 { margin-bottom: 0; }
   .feature-grid-4 .feature-card p { margin-top: 16px; }
-  .feature-grid-4 .feature-card { overflow: hidden; }
-  .feature-grid-4 .fc-copy { max-width: 100% !important; }
+  .feature-grid-4 .fc-copy { max-width: 100%; }
   .feature-grid-4 .fc-shot {
-    position: static !important;
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    left: auto !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin-top: 20px !important;
-    transform: none !important;
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    left: auto;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    margin-top: 20px;
+    transform: none;
   }
 
-  .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 20px; margin-bottom: 24px !important; }
-  .feature-row .fr-text { text-align: left; max-width: 524px !important; width: 100% !important; flex: none !important; padding: 24px !important; border-radius: 20px !important; }
-  .feature-row .fr-text h3 { margin: 0 0 16px !important; }
-  .feature-row .fr-text p { margin-top: 0 !important; }
-  .fr-visual { width: 524px !important; max-width: 100%; flex: none !important; }
-  .section-head { margin: 0 auto 36px !important; }
+  .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 20px; margin-bottom: 24px; }
+  .feature-row .fr-text { text-align: left; max-width: 524px; width: 100%; flex: none; padding: 24px; border-radius: 20px; }
+  .feature-row .fr-text h3 { margin: 0 0 16px; }
+  .feature-row .fr-text p { margin-top: 0; }
+  .fr-visual { width: 524px; max-width: 100%; flex: none; }
+  .section-head { margin: 0 auto 36px; }
 
-  /* .founder never got a tablet-range rule, so it fell through to the
-     desktop 200px-photo-column grid at widths too narrow for it. */
-  .founder { grid-template-columns: 1fr !important; text-align: left !important; }
+  .founder { grid-template-columns: 1fr; text-align: left; }
   .founder-photo { margin: 0 auto; }
-}
 
-/* The final-cta banner has no "keep the art, just resize" middle state the
-   way the repeating cards do (nothing else to cap its width against) — it
-   goes flat as soon as the desktop-only absolute coordinates stop fitting. */
-@media (max-width: 1024px) {
-  .final-cta { flex-direction: column !important; text-align: left !important; padding: 40px 24px 0 !important; height: auto !important; }
-  .fc-text { max-width: 100% !important; }
+  .final-cta { flex-direction: column; text-align: left; padding: 40px 24px 0; height: auto; }
+  .fc-text { max-width: 100%; }
   .fc-visual { display: none; }
 
   /* banner.png has a lot of transparent margin baked into the file around the
@@ -640,54 +633,61 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     margin-bottom: -5.6%;
   }
   .banner-shot-wrap .banner-shot {
-    position: absolute !important;
-    left: -28.75% !important;
-    top: -24.33% !important;
-    width: 167.99% !important;
-    height: auto !important;
-    max-width: none !important;
+    position: absolute;
+    left: -28.75%;
+    top: -24.33%;
+    width: 167.99%;
+    height: auto;
+    max-width: none;
   }
   .fc-shadow { display: none; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .wrap { padding: 0 16px; }
   .showcase { gap: 20px; }
   .phone { width: 220px; height: 460px; }
   .phone-2 { margin-top: 0; }
   .store-pill { width: 192px; height: 64px; }
-  .feature-row, .feature-row.reverse { flex-direction: column; gap: 16px; margin-bottom: 20px !important; }
-  .feature-grid-4 { grid-template-columns: 1fr; column-gap: 16px; row-gap: 16px; }
-  .feature-row .fr-text { text-align: left; width: 100% !important; flex: 1 1 auto !important; max-width: 100% !important; padding: 16px !important; border-radius: 16px !important; }
-  .feature-row .fr-text h3 { margin: 0 0 14px !important; }
-  .feature-row .fr-text p { margin-top: 0 !important; }
-  .fr-visual { width: 100% !important; flex: 1 1 auto !important; }
-  .section-head { margin: 0 auto 28px !important; }
-  .feature-grid-4 .feature-card { padding: 16px !important; border-radius: 16px !important; min-height: 0 !important; }
-  .feature-grid-4 .feature-card h3 { margin-bottom: 0; }
+  .feature-row, .feature-row.reverse { gap: 16px; margin-bottom: 20px; }
+  .feature-grid-4 { column-gap: 16px; row-gap: 16px; }
+  .feature-row .fr-text { max-width: 100%; padding: 16px; border-radius: 16px; }
+  .feature-row .fr-text h3 { margin: 0 0 14px; }
+  .fr-visual { width: 100%; }
+  .section-head { margin: 0 auto 28px; }
+  .feature-grid-4 .feature-card { padding: 16px; border-radius: 16px; }
   .feature-grid-4 .feature-card p { margin-top: 14px; }
 
   /* Perk-card mockups (.fc-shot) are hand-positioned fixed px that only make
      sense at the desktop width they were designed for, so at this breakpoint
-     they go flat and full-width instead. .fr-shot (showcase mockups) doesn't
-     need an override here: its left/top/width are already percentages of
-     the square .fr-backdrop, so the same crop/zoom framing as desktop just
-     scales down automatically. */
-  .feature-grid-4 .feature-card { overflow: hidden; }
-  .feature-grid-4 .fc-copy { max-width: 100% !important; }
-  .feature-grid-4 .fc-shot {
-    position: static !important;
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    left: auto !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin-top: 20px !important;
-    transform: none !important;
+     they go flat and full-width instead (already set above, restated here
+     as it's the tier where it actually starts mattering). .fr-shot (showcase
+     mockups) doesn't need an override: its left/top/width are already
+     percentages of the square .fr-backdrop, so the crop/zoom framing scales
+     down on its own. */
+
+  .nav-right { gap: 12px; }
+  .nav-burger { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    padding: 8px 24px 16px;
+    box-shadow: 0 12px 24px rgba(20,20,30,0.1);
   }
+  .nav-links a { padding: 12px 0; text-align: center; }
+  nav.site-nav.nav-open .nav-links { display: flex; }
+
+  .hero h1 { font-size: 28px; }
+  section { padding: 0; margin-bottom: 70px; }
+  footer .wrap { flex-direction: column; align-items: flex-start; }
+  .founder { padding: 32px 24px; }
 }
 
 /* Founder section */
@@ -904,110 +904,26 @@ footer .wrap {
 
 .legal h2 { scroll-margin-top: 84px; }
 
-@media (max-width: 480px) {
+/* Below clamp()'s floor, headings stop scaling with viewport width and go
+   flat — h1 is the largest heading by design, so every other heading needs
+   its own step down here or it ties/beats h1 at its smaller mobile sizes. */
+@media (max-width: 479px) {
   .legal-toc { columns: 1; }
-}
 
-@media (max-width: 860px) {
-  .feature-grid { grid-template-columns: 1fr 1fr; }
-  .benefits { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 640px) {
-  .nav-right { gap: 12px; }
-  .nav-burger { display: flex; }
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: #fff;
-    padding: 8px 24px 16px;
-    box-shadow: 0 12px 24px rgba(20,20,30,0.1);
-  }
-  .nav-links a { padding: 12px 0; text-align: center; }
-  nav.site-nav.nav-open .nav-links { display: flex; }
-  .feature-grid { grid-template-columns: 1fr; }
-  .benefits { grid-template-columns: 1fr; }
-  .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
-  .hero h1 { font-size: 28px; }
-  .hero p.subhead { font-size: 16px; }
-  .hero p.subhead .sub-br { display: inline; }
-  .hero h1 .br-a { display: inline; }
-  section { padding: 0; margin-bottom: 70px; }
-  footer .wrap { flex-direction: column; align-items: flex-start; }
-  .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
-  .founder-photo { margin: 0 auto; }
-}
-
-/* h1 at a flat 28px leaves a lot of unused width on wider phones — bump it
-   in two more steps as width grows, each verified against the real
-   rendered width of "until it's small enough to start" (the binding line)
-   so it still holds to exactly 2 lines. */
-@media (min-width: 480px) and (max-width: 559px) {
-  .hero h1 { font-size: 33px; }
-}
-
-@media (min-width: 560px) and (max-width: 640px) {
-  .hero h1 { font-size: 40px; }
-}
-
-/* Below ~399px, "until it's small enough to start" no longer fits on one
-   line at 28px (measured against the real rendered font, not estimated),
-   so swap which <br> is active: "until" moves up to join the first line
-   instead of orphaning the second line into a 3rd wrapped line. 28px still
-   fits both lines of that narrower arrangement down to ~375px; below that
-   (very small phones, e.g. 320px) even the shorter lines stop fitting at
-   28px, so drop to 23px too. */
-@media (max-width: 398px) {
-  .hero h1 .br-a { display: none; }
-  .hero h1 .br-b { display: inline; }
-}
-
-@media (max-width: 374px) {
-  .hero h1 { font-size: 23px; }
-}
-
-/* h1 is the largest heading on the page by design — on mobile these h2s
-   otherwise floor out at clamp()'s 26-28px minimum, which ties or beats
-   h1 at its smaller mobile sizes. Keep every tier a few px under h1's. */
-@media (max-width: 374px) {
-  .final-cta h2 { font-size: 20px; }
-  /* "Turns a boring routine into something" doesn't fit one line at any
-     size that still beats body+2px down here, even at 320px — swap to an
-     earlier break ("...into" / "something weirdly addictive") instead,
-     verified against the real rendered width down to 320px. */
-  .section-head h2 { font-size: 21px; }
-  .section-head h2 .h2-br-narrow { display: inline; }
-  .section-head h2 .h2-br-default { display: none; }
-  /* h3 (card headings) and .founder-copy h2 are flat sizes with no
-     breakpoint of their own — at this tier they'd otherwise beat both h1
-     (23px) and the h2s above (20px). Keep them a step down, never below
-     18px (body text is 16px, so this is body+2, the smallest a heading
-     should ever get). */
-  .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 19px; }
-  .founder-copy h2 { font-size: 20px; }
-}
-
-@media (min-width: 375px) and (max-width: 479px) {
+  .hero h1 { font-size: 24px; }
   .final-cta h2 { font-size: 24px; }
-  .section-head h2 { font-size: 19px; }
-  /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
-     card h3s (unchanged, 23/26px by default) now beat it, so cap them too. */
+  .section-head h2 { font-size: 22px; }
+  .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 19px; }
+}
+
+@media (max-width: 359px) {
+  .hero h1 { font-size: 22px; }
+  .final-cta h2 { font-size: 20px; }
+  .section-head h2 { font-size: 20px; }
+  /* founder-copy h2 is a flat size with no breakpoint of its own — at this
+     tier it would otherwise beat h1 (22px). Keep it a step down, never
+     below 18px (body text is 16px, so that's the smallest a heading
+     should ever get). */
   .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 18px; }
-}
-
-@media (min-width: 480px) and (max-width: 559px) {
-  .final-cta h2 { font-size: 28px; }
-  .section-head h2 { font-size: 25px; }
-  .feature-row .fr-text h3 { font-size: 24px; }
-}
-
-@media (min-width: 560px) and (max-width: 640px) {
-  .final-cta h2 { font-size: 34px; }
-  .section-head h2 { font-size: 30px; }
+  .founder-copy h2 { font-size: 20px; }
 }
