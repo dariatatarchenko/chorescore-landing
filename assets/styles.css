@@ -578,7 +578,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    the full container) means the fixed-px .fc-shot/.fr-shot placements still
    read correctly here — only the grid/flex direction changes, nothing about
    the art inside each card. */
-@media (max-width: 1024px) and (min-width: 641px) {
+@media (max-width: 1199px) and (min-width: 768px) {
   section { margin-bottom: 70px; }
   .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
   .hero p.subhead { font-size: 16px; }
@@ -620,7 +620,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 /* The final-cta banner has no "keep the art, just resize" middle state the
    way the repeating cards do (nothing else to cap its width against) — it
    goes flat as soon as the desktop-only absolute coordinates stop fitting. */
-@media (max-width: 1024px) {
+@media (max-width: 1199px) {
   .final-cta { flex-direction: column !important; text-align: left !important; padding: 40px 24px 0 !important; height: auto !important; }
   .fc-text { max-width: 100% !important; }
   .fc-visual { display: none; }
@@ -650,7 +650,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .fc-shadow { display: none; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .wrap { padding: 0 16px; }
   .showcase { gap: 20px; }
   .phone { width: 220px; height: 460px; }
@@ -904,16 +904,11 @@ footer .wrap {
 
 .legal h2 { scroll-margin-top: 84px; }
 
-@media (max-width: 480px) {
+@media (max-width: 479px) {
   .legal-toc { columns: 1; }
 }
 
-@media (max-width: 860px) {
-  .feature-grid { grid-template-columns: 1fr 1fr; }
-  .benefits { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .nav-right { gap: 12px; }
   .nav-burger { display: flex; }
   .nav-links {
@@ -931,10 +926,7 @@ footer .wrap {
   }
   .nav-links a { padding: 12px 0; text-align: center; }
   nav.site-nav.nav-open .nav-links { display: flex; }
-  .feature-grid { grid-template-columns: 1fr; }
-  .benefits { grid-template-columns: 1fr; }
   .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
-  .hero h1 { font-size: 28px; }
   .hero p.subhead { font-size: 16px; }
   .hero p.subhead .sub-br { display: inline; }
   .hero h1 .br-a { display: inline; }
@@ -944,38 +936,39 @@ footer .wrap {
   .founder-photo { margin: 0 auto; }
 }
 
-/* h1 at a flat 28px leaves a lot of unused width on wider phones — bump it
-   in two more steps as width grows, each verified against the real
-   rendered width of "until it's small enough to start" (the binding line)
-   so it still holds to exactly 2 lines. */
-@media (min-width: 480px) and (max-width: 559px) {
-  .hero h1 { font-size: 33px; }
-}
+/* Breakpoint scale — snap new responsive work to these five cutoffs
+   instead of inventing new ones:
+     <360      T1  smallest phones
+     360–479   T2  phones
+     480–767   T3  large phones / small tablets
+     768–959   T4  tablets
+     960–1199  T5  small desktop / laptop
+     ≥1200     T6  desktop (base, unqueried styles above)
+   Referenced here as max-width cutoffs (359/479/767/959/1199) to match
+   this file's desktop-first cascade. Above 479px, hero h1/section-head h2/
+   final-cta h2 all use clamp() (lines 141-148, 232-237, 786) and scale
+   continuously through T3-T6 without needing their own overrides — the
+   fixed steps below exist only because clamp() floors out at its minimum
+   below ~700px viewport, which the ≤479/≤359 tiers compensate for. */
 
-@media (min-width: 560px) and (max-width: 640px) {
-  .hero h1 { font-size: 40px; }
-}
-
-/* Below ~399px, "until it's small enough to start" no longer fits on one
+/* Below ~479px, "until it's small enough to start" no longer fits on one
    line at 28px (measured against the real rendered font, not estimated),
    so swap which <br> is active: "until" moves up to join the first line
    instead of orphaning the second line into a 3rd wrapped line. 28px still
-   fits both lines of that narrower arrangement down to ~375px; below that
+   fits both lines of that narrower arrangement down to 360px; below that
    (very small phones, e.g. 320px) even the shorter lines stop fitting at
    28px, so drop to 23px too. */
-@media (max-width: 398px) {
+@media (max-width: 479px) {
+  .hero h1 { font-size: 28px; }
   .hero h1 .br-a { display: none; }
   .hero h1 .br-b { display: inline; }
-}
-
-@media (max-width: 374px) {
-  .hero h1 { font-size: 23px; }
 }
 
 /* h1 is the largest heading on the page by design — on mobile these h2s
    otherwise floor out at clamp()'s 26-28px minimum, which ties or beats
    h1 at its smaller mobile sizes. Keep every tier a few px under h1's. */
-@media (max-width: 374px) {
+@media (max-width: 359px) {
+  .hero h1 { font-size: 23px; }
   .final-cta h2 { font-size: 20px; }
   /* "Turns a boring routine into something" doesn't fit one line at any
      size that still beats body+2px down here, even at 320px — swap to an
@@ -993,21 +986,10 @@ footer .wrap {
   .founder-copy h2 { font-size: 20px; }
 }
 
-@media (min-width: 375px) and (max-width: 479px) {
+@media (min-width: 360px) and (max-width: 479px) {
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
      card h3s (unchanged, 23/26px by default) now beat it, so cap them too. */
   .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 18px; }
-}
-
-@media (min-width: 480px) and (max-width: 559px) {
-  .final-cta h2 { font-size: 28px; }
-  .section-head h2 { font-size: 25px; }
-  .feature-row .fr-text h3 { font-size: 24px; }
-}
-
-@media (min-width: 560px) and (max-width: 640px) {
-  .final-cta h2 { font-size: 34px; }
-  .section-head h2 { font-size: 30px; }
 }
