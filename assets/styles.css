@@ -937,13 +937,14 @@ footer .wrap {
    below ~700px viewport, which this ≤479 tier compensates for. With no
    forced <br> anymore, "until" is inside the no-split unit too (so it
    prefers joining line 2 over orphaning line 1) — that unit is the widest
-   line, so h1 uses a fluid clamp() here instead of a fixed px matched to
-   one exact width: fixed values measured "safe" in headless Chrome kept
-   clipping on real devices, whose font metrics render visibly wider. A
-   scaling value degrades gracefully across the whole tier (and below it)
-   instead of assuming a hard 360px floor. */
+   line, so h1 uses a fluid clamp() instead of a fixed px matched to one
+   exact width. Calibrated from a real overflow report at 344px/23px flat
+   (clipped by roughly one character, ~15px) to back out how much wider
+   real-device text metrics render vs. this environment's measurements
+   (~9%), then sized with real margin on top of that correction rather
+   than reusing the same headless numbers that were wrong last time. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: clamp(17px, 5.5vw, 23px); }
+  .hero h1 { font-size: clamp(17px, 5.9vw, 26px); }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
