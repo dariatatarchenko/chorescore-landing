@@ -154,23 +154,12 @@ nav.site-nav .wrap {
   color: transparent;
 }
 
-/* Both manual breaks are off by default — desktop/tablet just wrap
-   naturally at their much wider clamp()'d font/max-width. Only the ≤640px
-   mobile query turns .br-a on (forcing "Big and overwhelming," onto its
-   own line); below 480px "until it's small enough to start" stops fitting
-   on one line at 28px, so .br-a/.br-b swap and "until" moves up to join
-   the first line instead. */
-.hero h1 .br-a,
-.hero h1 .br-b { display: none; }
-
 .hero p.subhead {
   font-size: 18px;
   color: var(--text2);
   max-width: 560px;
   margin: 20px auto 0;
 }
-
-.hero p.subhead .sub-br { display: none; }
 
 .hero-cta {
   margin-top: 40px;
@@ -246,8 +235,6 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   letter-spacing: -0.01em;
   color: var(--text1);
 }
-
-.section-head h2 .h2-br-narrow { display: none; }
 
 .section-head p {
   font-size: 16px;
@@ -928,65 +915,31 @@ footer .wrap {
   nav.site-nav.nav-open .nav-links { display: flex; }
   .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
   .hero p.subhead { font-size: 16px; }
-  .hero p.subhead .sub-br { display: inline; }
-  .hero h1 .br-a { display: inline; }
   section { padding: 0; margin-bottom: 70px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
   .founder-photo { margin: 0 auto; }
 }
 
-/* Breakpoint scale — snap new responsive work to these five cutoffs
-   instead of inventing new ones:
-     <360      T1  smallest phones
+/* Breakpoint scale — snap new responsive work to these four cutoffs
+   instead of inventing new ones. 360px is the hard floor (smallest
+   supported phone width, e.g. 320px is not designed for):
      360–479   T2  phones
      480–767   T3  large phones / small tablets
      768–959   T4  tablets
      960–1199  T5  small desktop / laptop
      ≥1200     T6  desktop (base, unqueried styles above)
-   Referenced here as max-width cutoffs (359/479/767/959/1199) to match
-   this file's desktop-first cascade. Above 479px, hero h1/section-head h2/
+   Referenced here as max-width cutoffs (479/767/959/1199) to match this
+   file's desktop-first cascade. Above 479px, hero h1/section-head h2/
    final-cta h2 all use clamp() (lines 141-148, 232-237, 786) and scale
    continuously through T3-T6 without needing their own overrides — the
    fixed steps below exist only because clamp() floors out at its minimum
-   below ~700px viewport, which the ≤479/≤359 tiers compensate for. */
-
-/* Below ~479px, "until it's small enough to start" no longer fits on one
-   line at 28px (measured against the real rendered font, not estimated),
-   so swap which <br> is active: "until" moves up to join the first line
-   instead of orphaning the second line into a 3rd wrapped line. 28px still
-   fits both lines of that narrower arrangement down to 360px; below that
-   (very small phones, e.g. 320px) even the shorter lines stop fitting at
-   28px, so drop to 23px too. */
+   below ~700px viewport, which this ≤479 tier compensates for. With no
+   forced <br> anymore, "until it's small enough to start" (the no-split
+   unit plus "until" before it) needs 26px or smaller to stay on one line
+   at the 360px floor — verified word-by-word, not estimated. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: 28px; }
-  .hero h1 .br-a { display: none; }
-  .hero h1 .br-b { display: inline; }
-}
-
-/* h1 is the largest heading on the page by design — on mobile these h2s
-   otherwise floor out at clamp()'s 26-28px minimum, which ties or beats
-   h1 at its smaller mobile sizes. Keep every tier a few px under h1's. */
-@media (max-width: 359px) {
-  .hero h1 { font-size: 23px; }
-  .final-cta h2 { font-size: 20px; }
-  /* "Turns a boring routine into something" doesn't fit one line at any
-     size that still beats body+2px down here, even at 320px — swap to an
-     earlier break ("...into" / "something weirdly addictive") instead,
-     verified against the real rendered width down to 320px. */
-  .section-head h2 { font-size: 21px; }
-  .section-head h2 .h2-br-narrow { display: inline; }
-  .section-head h2 .h2-br-default { display: none; }
-  /* h3 (card headings) and .founder-copy h2 are flat sizes with no
-     breakpoint of their own — at this tier they'd otherwise beat both h1
-     (23px) and the h2s above (20px). Keep them a step down, never below
-     18px (body text is 16px, so this is body+2, the smallest a heading
-     should ever get). */
-  .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 19px; }
-  .founder-copy h2 { font-size: 20px; }
-}
-
-@media (min-width: 360px) and (max-width: 479px) {
+  .hero h1 { font-size: 26px; }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
