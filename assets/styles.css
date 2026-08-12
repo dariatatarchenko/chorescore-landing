@@ -154,6 +154,20 @@ nav.site-nav .wrap {
   color: transparent;
 }
 
+/* "until" lives in two places — only one is shown at a time. ≥480px (the
+   unmodified desktop clamp) has room to keep it glued to "it's small
+   enough to start" as one nowrap unit, which reliably lands it on line 2.
+   ≤479px doesn't have that room without shrinking the font too far, so
+   "until" flows freely there instead (usually line 1) and the nowrap unit
+   covers only the narrower "it's small enough to start". */
+.hero h1 .until-loose { display: none; }
+.hero h1 .until-joined { display: inline; }
+
+@media (max-width: 479px) {
+  .hero h1 .until-loose { display: inline; }
+  .hero h1 .until-joined { display: none; }
+}
+
 .hero p.subhead {
   font-size: 18px;
   color: var(--text2);
@@ -934,17 +948,18 @@ footer .wrap {
    final-cta h2 all use clamp() (lines 141-148, 232-237, 786) and scale
    continuously through T3-T6 without needing their own overrides — the
    fixed steps below exist only because clamp() floors out at its minimum
-   below ~700px viewport, which this ≤479 tier compensates for. With no
-   forced <br> anymore, "until" is inside the no-split unit too (so it
-   prefers joining line 2 over orphaning line 1) — that unit is the widest
-   line, so h1 uses a fluid clamp() instead of a fixed px matched to one
-   exact width. Calibrated from a real overflow report at 344px/23px flat
-   (clipped by roughly one character, ~15px) to back out how much wider
-   real-device text metrics render vs. this environment's measurements
-   (~9%), then sized with real margin on top of that correction rather
-   than reusing the same headless numbers that were wrong last time. */
+   below ~700px viewport, which this ≤479 tier compensates for. "until" is
+   plain text again, not inside the no-split unit — keeping it in there
+   forced the font small enough to fit 6 words on one line, which read too
+   small. Without it, the wrap-to-3-lines cliff sits much higher (tested
+   word-by-word per width: 24px at 320, 26px at 344, 36px at 458, 37px at
+   479), so this clamp stays ~12% under that cliff at every width — real
+   margin, not a best-effort single-width fit, while still noticeably
+   bigger than the previous overcorrected version. "until" itself will
+   usually land on line 1, only line 2 when it doesn't fit — no longer
+   guaranteed on line 2, since that guarantee is what shrank the text. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: clamp(17px, 5.9vw, 26px); }
+  .hero h1 { font-size: clamp(19px, 6.5vw, 31px); }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
