@@ -936,12 +936,14 @@ footer .wrap {
    fixed steps below exist only because clamp() floors out at its minimum
    below ~700px viewport, which this ≤479 tier compensates for. With no
    forced <br> anymore, "until" is inside the no-split unit too (so it
-   prefers joining line 2 over orphaning line 1) — that whole unit fits at
-   360px with real margin at 23px (25px measured technically fits in
-   Chrome but with ~1px clearance, too tight for real-device font
-   rendering, which measured wider and clipped). */
+   prefers joining line 2 over orphaning line 1) — that unit is the widest
+   line, so h1 uses a fluid clamp() here instead of a fixed px matched to
+   one exact width: fixed values measured "safe" in headless Chrome kept
+   clipping on real devices, whose font metrics render visibly wider. A
+   scaling value degrades gracefully across the whole tier (and below it)
+   instead of assuming a hard 360px floor. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: 23px; }
+  .hero h1 { font-size: clamp(17px, 5.5vw, 23px); }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
