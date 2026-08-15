@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   nav.querySelectorAll('.nav-links a').forEach((a) => a.addEventListener('click', closeMenu));
+
+  document.addEventListener('click', (e) => {
+    if (!nav.classList.contains('nav-open')) return;
+    if (nav.contains(e.target)) return;
+    closeMenu();
+  });
 });
 
 document.addEventListener('DOMContentLoaded', () => {
