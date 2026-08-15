@@ -598,13 +598,30 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .feature-row .fr-text p { margin: 0 !important; }
   .fr-visual { width: 524px !important; max-width: 100%; flex: none !important; }
   .section-head { margin: 0 auto 36px !important; }
+}
+
+/* 960 is a real cutoff for .founder specifically (T4 vs T5 from the scale
+   below) even though nothing else in this file splits there yet: photo
+   and body copy step back up toward desktop size once there's enough room,
+   instead of staying shrunk all the way from 768 to 1199. */
+@media (min-width: 768px) and (max-width: 959px) {
   /* .founder keeps the same 2-column desktop grid as ≥1200 at this range —
      only the photo shrinks, so the column track goes auto (sized to the
      photo's own explicit width below) instead of the desktop-fixed 200px.
-     gap/padding stay the inherited base 40px/40px — equal, not bigger,
+     gap/padding stay the inherited base 20px/40px — gap well under padding,
      satisfies the gap-must-not-exceed-the-card's-own-padding rule. */
   .founder { grid-template-columns: auto 1fr !important; }
   .founder-photo { width: 100.8px !important; height: 100.8px !important; }
+}
+
+@media (min-width: 960px) and (max-width: 1199px) {
+  /* Photo goes back to the full desktop 168px here — grid-template-columns
+     isn't overridden, so it falls through to the base 200px 1fr, which
+     already fits a 168px photo fine. Body copy steps up too: h2 already
+     hit clamp()'s 34px ceiling by 850px, so it can't grow any further —
+     this is the part of "the text gets bigger" that's still available. */
+  .founder-photo { width: 168px !important; height: 168px !important; }
+  .founder-copy p { font-size: 18px !important; }
 }
 
 /* The final-cta banner has no "keep the art, just resize" middle state the
