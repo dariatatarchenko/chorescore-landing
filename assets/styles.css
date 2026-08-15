@@ -606,7 +606,12 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    way the repeating cards do (nothing else to cap its width against) — it
    goes flat as soon as the desktop-only absolute coordinates stop fitting. */
 @media (max-width: 1199px) {
-  .final-cta { flex-direction: column !important; text-align: left !important; padding: 24px 24px 0 !important; height: auto !important; }
+  /* align-items:center is inherited from the desktop row layout's base
+     rule — in a column flex it centers children horizontally by their own
+     content width instead of anchoring them to the left padding edge, so
+     .fc-text's left offset grows with viewport width instead of staying
+     pinned to padding-left. flex-start fixes that. */
+  .final-cta { flex-direction: column !important; align-items: flex-start !important; text-align: left !important; padding: 24px 24px 0 !important; height: auto !important; }
   .fc-text { max-width: 100% !important; }
   .fc-visual { display: none; }
 
