@@ -609,7 +609,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
    way the repeating cards do (nothing else to cap its width against) — it
    goes flat as soon as the desktop-only absolute coordinates stop fitting. */
 @media (max-width: 1199px) {
-  .final-cta { flex-direction: column !important; text-align: left !important; padding: 24px 24px 0 !important; height: auto !important; overflow: hidden !important; }
+  .final-cta { flex-direction: column !important; text-align: left !important; padding: 24px 24px 0 !important; height: auto !important; }
   .fc-text { max-width: 100% !important; }
   .fc-visual { display: none; }
 
@@ -627,9 +627,15 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     margin-bottom: -5.6%;
   }
   /* Cropping moved to this inner wrapper (was on .banner-shot-wrap itself)
-     so .fc-shadow, a sibling of this crop box, isn't clipped at the image's
-     tight edge — it's meant to bleed its blur past the photo into the card's
-     white space, only getting cut off at .final-cta's own rounded edge. */
+     so .fc-shadow isn't clipped at the image's tight edge. It must NOT be
+     .final-cta's own overflow either — the image is allowed (by design) to
+     bleed past the card's edge via the negative margin below, and clipping
+     .final-cta would cut that off too. So .fc-shadow gets its own dedicated
+     clip box instead: same coordinate frame as the image (a child of
+     .banner-shot-wrap, so the calc() below can keep tracking it exactly)
+     but inset by -172px (the shadow's own blur radius) on every side, i.e.
+     exactly as much bleed room as the blur can ever actually reach — the
+     hard edge exists but nothing visible should ever reach it. */
   .banner-shot-crop { position: absolute; inset: 0; overflow: hidden; }
   .banner-shot-wrap .banner-shot {
     position: absolute !important;
@@ -639,12 +645,17 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     height: auto !important;
     max-width: none !important;
   }
-  /* Reparented into .banner-shot-wrap in the markup so it can be positioned
-     as a % of the image crop instead of hidden — same left/top/width/height
-     as the desktop fixed-px placement, re-derived against banner.png's
-     natural 1858x1725 canvas and the wrap's 1106x1237 content window so it
-     tracks the phones at any width instead of a single fixed viewport. */
-  .fc-shadow { left: 51.39% !important; top: 39.89% !important; width: 35.45% !important; height: 55.16% !important; }
+  .fc-shadow-clip { position: absolute; inset: -172px; overflow: hidden; pointer-events: none; }
+  /* left/top/width/height re-expressed from the wrap-relative 51.39%/
+     39.89%/35.45%/55.16% (see banner-shot-crop comment above) against the
+     clip box's enlarged frame: (100% - 344px) recovers the wrap's own
+     width/height inside the 172px buffer on each side. */
+  .fc-shadow {
+    left: calc(172px + (100% - 344px) * 0.5139) !important;
+    top: calc(172px + (100% - 344px) * 0.3989) !important;
+    width: calc((100% - 344px) * 0.3545) !important;
+    height: calc((100% - 344px) * 0.5516) !important;
+  }
 }
 
 @media (max-width: 767px) {
