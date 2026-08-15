@@ -758,7 +758,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 
 .founder-copy .eyebrow { margin-bottom: 8px; }
 .founder-copy h2 { font-size: clamp(28px, 4vw, 34px); line-height: 1.15; margin-bottom: 14px; }
-.founder-copy p { font-size: 16px; color: var(--text2); margin: 0 0 12px; }
+.founder-copy p { font-size: 18px; color: var(--text2); margin: 0 0 12px; }
 .founder-copy p:last-child { margin-bottom: 0; }
 .founder-copy strong { color: var(--text1); }
 
