@@ -732,7 +732,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 .founder {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 20px;
+  gap: 32px;
   align-items: start;
   background: var(--card-bg);
   border-radius: 24px;
