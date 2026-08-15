@@ -109,6 +109,7 @@ nav.site-nav .wrap {
 
 .nav-burger {
   display: none;
+  position: relative;
   width: 38px;
   height: 38px;
   align-items: center;
@@ -120,12 +121,30 @@ nav.site-nav .wrap {
   color: var(--text1);
 }
 
-.nav-burger svg { width: 22px; height: 22px; }
+.nav-burger svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 1;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
 
-.nav-burger .close-icon { display: none; }
+.nav-burger .close-icon {
+  transform: translate(-50%, -50%) rotate(-90deg);
+  opacity: 0;
+}
 
-.nav-burger[aria-expanded="true"] .burger-icon { display: none; }
-.nav-burger[aria-expanded="true"] .close-icon { display: block; }
+.nav-burger[aria-expanded="true"] .burger-icon {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+.nav-burger[aria-expanded="true"] .close-icon {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 1;
+}
 
 /* Hero */
 .hero {
@@ -739,6 +758,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .sparkle { animation: none; }
   html { scroll-behavior: auto; }
+  .nav-burger svg { transition: none; }
 }
 
 /* Final CTA */
@@ -926,7 +946,8 @@ footer .wrap {
   .nav-links a { padding: 12px 0; text-align: center; }
   nav.site-nav.nav-open .nav-links { display: flex; }
   .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
-  .hero p.subhead { font-size: 16px; }
+  .hero p.subhead { font-size: 16px; margin-top: 26px; }
+  .hero-cta { margin-top: 46px; }
   section { padding: 0; margin-bottom: 70px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
@@ -957,7 +978,7 @@ footer .wrap {
    usually land on line 1, only line 2 when it doesn't fit — no longer
    guaranteed on line 2, since that guarantee is what shrank the text. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: clamp(19px, 6.5vw, 31px); }
+  .hero h1 { font-size: clamp(19px, 6.5vw, 26px); }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
