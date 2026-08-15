@@ -965,7 +965,7 @@ footer .wrap {
    .founder-copy .eyebrow/h2/p selectors keep matching unchanged. */
 @media (min-width: 480px) and (max-width: 767px) {
   .founder {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr !important;
     grid-template-areas: "photo head" "body body";
     text-align: left;
   }
