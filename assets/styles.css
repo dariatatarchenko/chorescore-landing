@@ -592,7 +592,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     transform: none !important;
   }
 
-  .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 20px; margin-bottom: 24px !important; }
+  .feature-row, .feature-row.reverse { flex-direction: column; align-items: center; gap: 20px; margin-bottom: 32px !important; }
   .feature-row .fr-text { text-align: left; max-width: 524px !important; width: 100% !important; flex: none !important; padding: 24px !important; border-radius: 20px !important; }
   .feature-row .fr-text h3 { margin: 0 0 16px !important; }
   .feature-row .fr-text p { margin-top: 0 !important; }
@@ -644,7 +644,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .phone { width: 220px; height: 460px; }
   .phone-2 { margin-top: 0; }
   .store-pill { width: 192px; height: 64px; }
-  .feature-row, .feature-row.reverse { flex-direction: column; gap: 16px; margin-bottom: 20px !important; }
+  .feature-row, .feature-row.reverse { flex-direction: column; gap: 16px; margin-bottom: 24px !important; }
   .feature-grid-4 { grid-template-columns: 1fr; column-gap: 16px; row-gap: 16px; }
   .feature-row .fr-text { text-align: left; width: 100% !important; flex: 1 1 auto !important; max-width: 100% !important; padding: 16px !important; border-radius: 16px !important; }
   .feature-row .fr-text h3 { margin: 0 0 14px !important; }
