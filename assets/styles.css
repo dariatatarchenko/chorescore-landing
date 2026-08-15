@@ -635,7 +635,12 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     height: auto !important;
     max-width: none !important;
   }
-  .fc-shadow { display: none; }
+  /* Reparented into .banner-shot-wrap in the markup so it can be positioned
+     as a % of the image crop instead of hidden — same left/top/width/height
+     as the desktop fixed-px placement, re-derived against banner.png's
+     natural 1858x1725 canvas and the wrap's 1106x1237 content window so it
+     tracks the phones at any width instead of a single fixed viewport. */
+  .fc-shadow { left: 51.39% !important; top: 39.89% !important; width: 35.45% !important; height: 55.16% !important; }
 }
 
 @media (max-width: 767px) {
@@ -707,7 +712,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 .founder-photo img { width: 100%; height: 100%; object-fit: cover; }
 
 .founder-copy .eyebrow { margin-bottom: 8px; }
-.founder-copy h2 { font-size: 24px; line-height: 1.15; margin-bottom: 14px; }
+.founder-copy h2 { font-size: clamp(28px, 4vw, 34px); line-height: 1.15; margin-bottom: 14px; }
 .founder-copy p { font-size: 16px; color: var(--text2); margin: 0 0 12px; }
 .founder-copy p:last-child { margin-bottom: 0; }
 .founder-copy strong { color: var(--text1); }
@@ -772,7 +777,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   max-width: none;
 }
 
-.final-cta h2 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; }
+.final-cta h2 { font-size: clamp(28px, 4vw, 34px); line-height: 1.15; }
 .final-cta p { color: var(--text2); margin: 14px 0 28px; font-size: 16px; }
 
 /* Footer */
@@ -921,7 +926,7 @@ footer .wrap {
   section { padding: 0; margin-bottom: 70px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; }
-  .founder-photo { margin: 0 auto; }
+  .founder-photo { width: 134.4px; height: 134.4px; margin: 0 auto; }
 }
 
 /* Breakpoint scale — snap new responsive work to these four cutoffs
@@ -934,7 +939,9 @@ footer .wrap {
      ≥1200     T6  desktop (base, unqueried styles above)
    Referenced here as max-width cutoffs (479/767/959/1199) to match this
    file's desktop-first cascade. Above 479px, hero h1/section-head h2/
-   final-cta h2 all use clamp() (lines 141-148, 232-237, 786) and scale
+   final-cta h2/founder-copy h2 all use clamp() (section-head/final-cta/
+   founder-copy share the exact same clamp(28px,4vw,34px) so all three page
+   headings stay the same size at every width) and scale
    continuously through T3-T6 without needing their own overrides — the
    fixed steps below exist only because clamp() floors out at its minimum
    below ~700px viewport, which this ≤479 tier compensates for. "until" is
@@ -949,8 +956,7 @@ footer .wrap {
    guaranteed on line 2, since that guarantee is what shrank the text. */
 @media (max-width: 479px) {
   .hero h1 { font-size: clamp(19px, 7.25vw, 26px); }
-  .final-cta h2 { font-size: 24px; }
-  .section-head h2 { font-size: 22px; }
+  .final-cta h2, .section-head h2, .founder-copy h2 { font-size: 22px; }
   /* section-head h2 dropped here to hold its own 2-line wrap —
      card h3s (unchanged, 23/26px by default) now beat it, so cap them too. */
   .feature-grid-4 .feature-card h3, .feature-row .fr-text h3 { font-size: 18px; }
