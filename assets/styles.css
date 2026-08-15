@@ -731,7 +731,7 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
 /* Founder section */
 .founder {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: auto 1fr;
   gap: 20px;
   align-items: start;
   background: var(--card-bg);
