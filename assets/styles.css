@@ -978,7 +978,7 @@ footer .wrap {
    usually land on line 1, only line 2 when it doesn't fit — no longer
    guaranteed on line 2, since that guarantee is what shrank the text. */
 @media (max-width: 479px) {
-  .hero h1 { font-size: clamp(19px, 6.5vw, 26px); }
+  .hero h1 { font-size: clamp(19px, 7.25vw, 26px); }
   .final-cta h2 { font-size: 24px; }
   .section-head h2 { font-size: 19px; }
   /* section-head h2 dropped to 19px here to hold its own 2-line wrap —
