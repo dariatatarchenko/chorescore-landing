@@ -53,11 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Native smooth scroll (both the CSS `scroll-behavior: smooth` and the
+  // `behavior: 'smooth'` option below) can get interrupted mid-animation on
+  // iOS Safari and stall short of the target. Snap-correct to the exact
+  // destination once the animation should be done, so "scroll to top" always
+  // actually lands at 0 instead of wherever it happened to stop.
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      if (window.scrollY !== 0) window.scrollTo(0, 0);
+    }, 700);
+  };
+
   const brand = document.querySelector('.brand');
   if (brand && brand.getAttribute('href') === '#top') {
     brand.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
     });
   }
 
@@ -68,6 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', () => {
       toTop.classList.toggle('is-visible', window.scrollY > getThreshold());
     });
-    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    toTop.addEventListener('click', scrollToTop);
   }
 });
