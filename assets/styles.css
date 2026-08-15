@@ -598,11 +598,8 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
   .feature-row .fr-text p { margin: 0 !important; }
   .fr-visual { width: 524px !important; max-width: 100%; flex: none !important; }
   .section-head { margin: 0 auto 36px !important; }
-
-  /* .founder never got a tablet-range rule, so it fell through to the
-     desktop 200px-photo-column grid at widths too narrow for it. */
-  .founder { grid-template-columns: 1fr !important; text-align: left !important; gap: 18px !important; }
-  .founder-photo { margin: 0 auto; }
+  /* .founder gets no override here (768-1199) anymore — it now uses the
+     same 2-column desktop grid as ≥1200 at this range too. */
 }
 
 /* The final-cta banner has no "keep the art, just resize" middle state the
@@ -941,7 +938,25 @@ footer .wrap {
   section { padding: 0; margin-bottom: 70px; }
   footer .wrap { flex-direction: column; align-items: flex-start; }
   .founder { grid-template-columns: 1fr; text-align: left; padding: 32px 24px; gap: 12px; }
-  .founder-photo { width: 134.4px; height: 134.4px; margin: 0 auto; }
+  .founder-photo { width: 107.52px; height: 107.52px; margin: 0 auto; }
+}
+
+/* 480-767 (T3) only: photo sits beside the eyebrow+h2, paragraphs run full
+   width below both — not the ≤479 fully-stacked layout, not the 768+
+   fully-side-by-side one. .founder-copy is unwrapped via display:contents
+   so its head/body children become direct grid items placeable in their
+   own areas; the wrapper itself stays in the markup so the existing
+   .founder-copy .eyebrow/h2/p selectors keep matching unchanged. */
+@media (min-width: 480px) and (max-width: 767px) {
+  .founder {
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "photo head" "body body";
+    text-align: left;
+  }
+  .founder-copy { display: contents; }
+  .founder-copy-head { grid-area: head; }
+  .founder-copy-body { grid-area: body; }
+  .founder-photo { grid-area: photo; margin: 0; }
 }
 
 /* Breakpoint scale — snap new responsive work to these four cutoffs
