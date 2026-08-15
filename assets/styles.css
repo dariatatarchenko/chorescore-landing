@@ -945,7 +945,7 @@ footer .wrap {
   }
   .nav-links a { padding: 12px 0; text-align: center; }
   nav.site-nav.nav-open .nav-links { display: flex; }
-  .hero { padding: 0; margin-top: 70px; margin-bottom: 70px; }
+  .hero { padding: 0; margin-top: 64px; margin-bottom: 70px; }
   .hero p.subhead { font-size: 16px; margin-top: 26px; }
   .hero-cta { margin-top: 46px; }
   section { padding: 0; margin-bottom: 70px; }
