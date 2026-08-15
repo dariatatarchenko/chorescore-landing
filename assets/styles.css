@@ -639,10 +639,15 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
      bleed past the card's edge via the negative margin below, and clipping
      .final-cta would cut that off too. So .fc-shadow gets its own dedicated
      clip box instead: same coordinate frame as the image (a child of
-     .banner-shot-wrap, so the calc() below can keep tracking it exactly)
-     but inset by -172px (the shadow's own blur radius) on every side, i.e.
-     exactly as much bleed room as the blur can ever actually reach — the
-     hard edge exists but nothing visible should ever reach it. */
+     .banner-shot-wrap, so the calc() below can keep tracking it exactly).
+     The buffer is NOT the shadow's full 172px blur radius on every side —
+     a uniform -172px inset made this box wider than the viewport at narrow
+     widths, and `html{overflow-x:hidden}` alone doesn't reliably suppress
+     that on real phones (iOS Safari in particular). Vertical bleed is
+     harmless (the page just gets marginally taller) so it keeps the full
+     172px; horizontal is capped at 24px — comfortably less than the
+     ≥40px of combined .wrap + .final-cta side padding at the narrowest
+     (360px) width, so this box can never reach the viewport edge. */
   .banner-shot-crop { position: absolute; inset: 0; overflow: hidden; }
   .banner-shot-wrap .banner-shot {
     position: absolute !important;
@@ -652,15 +657,16 @@ section { padding: 0; margin-bottom: 140px; scroll-margin-top: 88px; }
     height: auto !important;
     max-width: none !important;
   }
-  .fc-shadow-clip { position: absolute; inset: -172px; overflow: hidden; pointer-events: none; }
+  .fc-shadow-clip { position: absolute; inset: -172px -24px; overflow: hidden; pointer-events: none; }
   /* left/top/width/height re-expressed from the wrap-relative 51.39%/
      39.89%/35.45%/55.16% (see banner-shot-crop comment above) against the
-     clip box's enlarged frame: (100% - 344px) recovers the wrap's own
-     width/height inside the 172px buffer on each side. */
+     clip box's enlarged frame: (100% - 48px) recovers the wrap's own width
+     inside the 24px horizontal buffer, (100% - 344px) its height inside
+     the 172px vertical buffer. */
   .fc-shadow {
-    left: calc(172px + (100% - 344px) * 0.5139) !important;
+    left: calc(24px + (100% - 48px) * 0.5139) !important;
     top: calc(172px + (100% - 344px) * 0.3989) !important;
-    width: calc((100% - 344px) * 0.3545) !important;
+    width: calc((100% - 48px) * 0.3545) !important;
     height: calc((100% - 344px) * 0.5516) !important;
   }
 }
