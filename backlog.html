@@ -1,0 +1,1846 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ChoreScore Backlog</title>
+<style>
+  :root {
+    --bg: #f5f7f4;
+    --surface: #ffffff;
+    --surface-2: #edf1ec;
+    --text: #1a231f;
+    --text-muted: #5c6862;
+    --border: #dde3dc;
+    --accent: #2c6b58;
+    --warn: #a15c1f;
+    --warn-soft: #f6e6d3;
+    --shadow: 0 1px 2px rgba(20, 30, 25, 0.06), 0 1px 1px rgba(20, 30, 25, 0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121613; --surface: #191f1b; --surface-2: #1f2622;
+      --text: #eaf0ec; --text-muted: #93a49b; --border: #2b332e;
+      --accent: #56b596; --warn: #e0a860; --warn-soft: #3a2c18;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.25);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.45;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 64px; }
+  header.top {
+    position: sticky; top: 0; z-index: 10; background: var(--bg);
+    padding: 14px 16px 12px; margin: -20px -16px 20px; border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 4px;
+  }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 12px; }
+  .progress-row { display: flex; align-items: center; gap: 10px; }
+  .progress-track {
+    flex: 1; height: 8px; border-radius: 5px; background: var(--surface-2);
+    overflow: hidden; border: 1px solid var(--border);
+  }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 5px; transition: width 0.35s ease; width: 0%; }
+  .progress-count {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums;
+    font-size: 13px; color: var(--text-muted); white-space: nowrap;
+  }
+  .sync-note { margin-top: 8px; font-size: 12px; color: var(--text-muted); min-height: 15px; }
+  section.card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden;
+  }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 14px 16px 10px; }
+  .card-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; }
+  .card-count {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums;
+    font-size: 12px; color: var(--text-muted); flex-shrink: 0;
+  }
+  ul.items { list-style: none; margin: 0; padding: 0 6px 6px; }
+  .item { padding: 2px 4px; }
+  .item-label { display: flex; align-items: flex-start; gap: 11px; padding: 10px 6px; border-radius: 9px; cursor: pointer; user-select: none; }
+  .item-label:hover { background: var(--surface-2); }
+  .cb { position: absolute; width: 21px; height: 21px; margin: 1px 0 0 0; opacity: 0; cursor: pointer; }
+  .box {
+    flex-shrink: 0; width: 21px; height: 21px; margin-top: 1px; border-radius: 6px;
+    border: 1.5px solid var(--border); background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .cb:checked ~ .box { background: var(--accent); border-color: var(--accent); }
+  .box svg { width: 13px; height: 13px; opacity: 0; transform: scale(0.6); transition: opacity 0.12s ease, transform 0.12s ease; }
+  .cb:checked ~ .box svg { opacity: 1; transform: scale(1); }
+  .item-body { flex: 1; min-width: 0; }
+  .item-text { font-size: 14.5px; color: var(--text); }
+  .cb:checked ~ .item-body .item-text { color: var(--text-muted); text-decoration: line-through; text-decoration-color: var(--border); }
+  .item-note { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+  .cb:checked ~ .item-body .item-note { opacity: 0.6; }
+  .flag {
+    display: inline-block; margin-top: 4px; padding: 1px 7px; border-radius: 20px;
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.01em;
+    background: var(--warn-soft); color: var(--warn); white-space: nowrap;
+  }
+  footer { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 24px; padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">ChoreScore &middot; внутренний бэклог</p>
+    <h1>Что осталось сделать</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-count" id="progressCount">0 / 0</div>
+    </div>
+    <p class="sync-note" id="syncNote">Загрузка отметок…</p>
+  </header>
+  <div id="sections">
+    <section class="card">
+      <div class="card-head"><h2>App Store / релиз</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="bild-prikrepit-k-versii-i-otpravit-na-re">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="bild-prikrepit-k-versii-i-otpravit-na-re">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Билд прикрепить к версии и отправить на ревью</span>
+              <div class="item-note">ничего из пунктов ниже это не блокирует</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="bankovskii-schet-na-proverke-u-apple-zag">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="bankovskii-schet-na-proverke-u-apple-zag">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Банковский счёт — на проверке у Apple (загрузка паспорта)</span>
+              <div class="item-note">статус не подтверждён</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="nalogovaya-forma-w-9-zhdet-finalnoi-prov">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="nalogovaya-forma-w-9-zhdet-finalnoi-prov">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Налоговая форма (W-9) — ждёт финальной проверки бухгалтера</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="eu-trader-dsa-status-nuzhen-pochtovyi-ya">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="eu-trader-dsa-status-nuzhen-pochtovyi-ya">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">EU trader / DSA статус — нужен почтовый ящик (P.O. Box)</span>
+              <div class="item-note">форма Apple принимает P.O. Box</div>
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Покупки / премиум</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="verify-purchase-edge-function-zadeploena">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="verify-purchase-edge-function-zadeploena">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">verify-purchase Edge Function — задеплоена, ни разу не проверена на реальной покупке</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="lifetime-premium-24-99-ni-razu-ne-kuplen">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="lifetime-premium-24-99-ni-razu-ne-kuplen">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Lifetime Premium ($24.99) — ни разу не куплен по-настоящему</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="people-is-premium-realno-flipaetsya-posl">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="people-is-premium-realno-flipaetsya-posl">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">people.is_premium реально флипается после покупки — не подтверждено</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="premium-nikogda-ne-otzyvaetsya-avtomatic">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="premium-nikogda-ne-otzyvaetsya-avtomatic">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Премиум никогда не отзывается автоматически (отмена/рефанд)</span>
+              <div class="item-note">нужен App Store Server Notifications V2, не срочно — реальных платежей ещё нет</div>
+              <span class="flag">реальный гэп</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Нужен реальный телефон</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="owner-transfer-pri-vyhode-vladelca">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="owner-transfer-pri-vyhode-vladelca">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Owner-transfer при выходе владельца</span>
+              <div class="item-note">нужны 2 реальных аккаунта, ни разу не тестировалось</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zhivoi-retest-pervaya-popytka-verifyotp">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zhivoi-retest-pervaya-popytka-verifyotp">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Живой ретест: первая попытка verifyOTP при смене email больше не должна падать</span>
+              <div class="item-note">причина найдена — известный баг GoTrue (supabase/auth-js#798), исправлено тихим повтором в коде, ни разу не проверено на реальном повторе бага</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="changepasswordview-realnaya-smena-paroly">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="changepasswordview-realnaya-smena-paroly">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">ChangePasswordView — реальная смена пароля + live-проверка текущего пароля по уходу с поля</span>
+              <div class="item-note">код собирается чисто, end-to-end не прогонялся</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="email-password-ekrany-animaciya-otkrytiy">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="email-password-ekrany-animaciya-otkrytiy">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Email/Password экраны — анимация открытия/закрытия (наезжает/уезжает справа)</span>
+              <div class="item-note">починила zIndex-коллизию, не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="kalendar-tormoza-pri-pereklyuchenii-na-v">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="kalendar-tormoza-pri-pereklyuchenii-na-v">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Календарь — тормоза при переключении на вкладку</span>
+              <div class="item-note">убрала тройной пересчёт + добавила кэш, дальше нашла и точечно почистила инвалидацию кэша по отметкам — тоже не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="realtime-sinhronizaciya-mezhdu-uchastnik">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="realtime-sinhronizaciya-mezhdu-uchastnik">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Realtime-синхронизация между участниками дома</span>
+              <div class="item-note">люди/зоны/задачи/лайки/уведомления должны обновляться сами по себе на втором устройстве. REPLICA IDENTITY FULL применена, найдена и починена утечка памяти (несколько параллельных подписок не закрывались и копились — реально убило приложение по памяти), добавлена досинхронизация при каждом переподключении. Ни разу не проверено долгой сессией вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="limit-zon-5-na-free-teper-proveryaetsya">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="limit-zon-5-na-free-teper-proveryaetsya">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Лимит зон (5 на free) теперь проверяется и на сервере</span>
+              <div class="item-note">раньше можно было проскочить лимит двойным тапом из формы задачи — завели SQL-функцию add_zone с реальной проверкой, нужно подтвердить что лимит держит на реальном устройстве</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="redaktirovanie-zon-sverh-limita-teper-to">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="redaktirovanie-zon-sverh-limita-teper-to">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Редактирование зон сверх лимита теперь точечное, не блокирует всё подряд</span>
+              <div class="item-note">новое: раньше при превышении лимита блокировалось редактирование ВСЕХ зон в доме; теперь первые 5 (по порядку создания) остаются редактируемыми, только 6-я и дальше — только удаление. Не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="prochitannye-uvedomleniya-tolko-seraya-i">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="prochitannye-uvedomleniya-tolko-seraya-i">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Прочитанные уведомления — только серая иконка</span>
+              <div class="item-note">новое: убрали точку-индикатор и подсветку фона у непрочитанных, оставили только цвет иконки (фиолетовая/серая). Пометка «прочитано» теперь срабатывает при закрытии экрана уведомлений, а не при открытии. Не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="perenaznachenie-zadach-ushedshego-uchast">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="perenaznachenie-zadach-ushedshego-uchast">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Переназначение задач ушедшего участника</span>
+              <div class="item-note">открытие задачи, у которой все назначенные — бывшие/удалённые участники, больше не сохраняет обратно тот же мёртвый id. Пикер всегда пустой — ни автовыбора, ни предвыбора; Save с одним оставшимся в доме назначает на него через штатный fallback, с несколькими — форма требует явно выбрать. Работает одинаково на free и premium. Подтверждено на free, premium — нет</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="doma-siroty-pri-vyhode-udalenii-akkaunta">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="doma-siroty-pri-vyhode-udalenii-akkaunta">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Дома-сироты при выходе/удалении аккаунта — реально почищено</span>
+              <div class="item-note">delete_own_account, leave_household и switch_household_by_code теперь удаляют дом (каскадом зоны/задачи/уведомления), если уходящий был там последним. Убрали 19 уже накопившихся с начала августа. Дважды подтверждено вживую (свежий аккаунт → зона-метка → удаление → дома нет)</div>
+              <span class="flag">подтверждено</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="uvedomlenie-pri-udalenii-akkaunta">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="uvedomlenie-pri-udalenii-akkaunta">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Уведомление при удалении аккаунта</span>
+              <div class="item-note">раньше при самостоятельном удалении остальные в доме не узнавали вообще ничего — теперь приходит «X deleted their account», как при Leave/Remove. Не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="retraction-uvedomleniya-task-completed-p">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="retraction-uvedomleniya-task-completed-p">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Retraction уведомления «Task completed» при снятии галочки</span>
+              <div class="item-note">не работало — у notifications вообще не было RLS-политики на DELETE (ни для этого, ни для 30-дневной автозачистки). Политика добавлена. Полный цикл после фикса (отметить → снять → уведомление реально пропало) не прогоняли</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="sign-in-sign-up-pereklyuchalka-perenesen">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sign-in-sign-up-pereklyuchalka-perenesen">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Sign In/Sign Up переключалка перенесена в заголовок</span>
+              <div class="item-note">была снизу экрана с жирным текстом, теперь в самой строке «Sign In»/шага регистрации, справа, фиолетовым обычным весом — как «Forgot password». У Forgot Password такой ссылки больше нет вообще. Не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ekran-zagruzki-mercayuschie-zvezdochki-v">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ekran-zagruzki-mercayuschie-zvezdochki-v">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Экран загрузки — мерцающие звёздочки вместо спиннера</span>
+              <div class="item-note">разобрана на реальные суб-фигуры из bling-fill.svg (3 звёздочки-искры + 4 точки), каждая мигает по-своему; поднята выше на 60pt, пульс смещён в сторону увеличения, мерцают только звёздочки (точки статичны), починен реальный баг SwiftUI из-за которого анимация останавливалась после одного цикла. Не проверено вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="polnyi-progon-chek-lista-segodnyashnih-p">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="polnyi-progon-chek-lista-segodnyashnih-p">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Полный прогон чек-листа сегодняшних правок</span>
+              <div class="item-note">отдельный документ — ChoreScore Field Test, ссылка вверху этой страницы</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="obrezka-vtoroi-stroki-v-kartochkah-zadac">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="obrezka-vtoroi-stroki-v-kartochkah-zadac">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Обрезка второй строки в карточках задач (Week и Tasks)</span>
+              <div class="item-note">сначала заполняет строку по максимуму, потом ужимает имя (не короче 5 символов + …, только в Week), и только потом зону. Заняло 3 захода — резиновость нужно было проставить на каждом уровне вложенности, не только снаружи. Не проверено вживую</div>
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="limit-imeni-cheloveka-i-nazvaniya-zony-2">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="limit-imeni-cheloveka-i-nazvaniya-zony-2">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Лимит имени человека и названия зоны — 25 символов</span>
+              <div class="item-note">счётчик как у названия задачи, инпуты не двигались. Не проверено вживую</div>
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="obrezanie-emodzi-avatarki-v-knopke-my-ta">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="obrezanie-emodzi-avatarki-v-knopke-my-ta">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Обрезание эмодзи-аватарки в кнопке «My Tasks» (18pt)</span>
+              <div class="item-note">4 захода на эту проблему — теперь у текста-эмодзи явно увеличенная рамка для рендера (1.4×), сама кнопка и видимый размер кружка не тронуты. Починено по реальному скриншоту, не вслепую. Не проверено вживую</div>
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="oflain-ochered-dlya-laikov-sdelana-chere">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="oflain-ochered-dlya-laikov-sdelana-chere">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Офлайн-очередь для лайков сделана через существующую toggle_task_like (не новые функции)</span>
+              <div class="item-note">починена та же гонка, что и у завершений — одним атомарным UPDATE RETURNING. Файл SQL финальный, отправлен. Не проверено вживую</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zavershenie-taska-teper-dvigaet-ego-v-sp">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zavershenie-taska-teper-dvigaet-ego-v-sp">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Завершение таска теперь двигает его в списке у ВСЕХ пользователей, не только у того кто нажал</span>
+              <div class="item-note">loadHousehold сравнивает старое/новое состояние завершений при каждой синхронизации и подвигает таск, если кто угодно пересёк границу выполнено/не выполнено. От лайков — никогда. Не проверено вживую</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="spisok-taskov-skakal-ot-laikov-i-lyubyh">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="spisok-taskov-skakal-ot-laikov-i-lyubyh">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Список тасков скакал от лайков и любых чужих действий</span>
+              <div class="item-note">у запроса тасков не было .order() — Postgres мог вернуть их в разном порядке при каждой синхронизации. Задан жёсткий порядок по id. Не проверено вживую</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="statistika-lomalas-ot-dlinnyh-imen-nazva">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="statistika-lomalas-ot-dlinnyh-imen-nazva">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Статистика ломалась от длинных имён/названий (до 25 символов)</span>
+              <div class="item-note">4 места без обрезки в три точки — баннер MVP, таблица лидеров, и два графика (House Architect, Hot Zones), где обрезка была, но .fixedSize() её блокировал. Все починены. Не проверено вживую</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="svyaz-propala-couldn-t-refresh-everythin">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="svyaz-propala-couldn-t-refresh-everythin">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">«Связь пропала» / «Couldn&#x27;t refresh everything» тосты — заменены на тихий приглушенный баннер внизу</span>
+              <div class="item-note">по прямому запросу: тосты — только для настоящих ошибок, не для мельтешения. Теперь фоновые проблемы (не долетела часть данных, realtime не подключился, реально нет сети) копятся в один флаг connectionTrouble с 5-секундной задержкой — если само прошло за 5 сек, баннер вообще не покажется. Плюс: loadHousehold теперь реально повторяет попытку один раз (раньше «will retry automatically» было пустыми словами, ничего не повторяло)</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="taski-vidny-v-week-no-propadali-iz-spisk">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="taski-vidny-v-week-no-propadali-iz-spisk">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Таски видны в Week, но пропадали из списка Tasks — нашла и починила</span>
+              <div class="item-note">deleteZone архивировал задачи только локально, ни разу не сохраняя archived_at на сервер (та же дыра есть и в веб-версии) — следующий realtime-рефетч тихо разархивировал их обратно с зоной, которой больше нет; Tasks-таб такие не показывает вообще (ищет только среди существующих зон), а Week/Calendar зону не проверяет и продолжал их планировать. Теперь archived_at реально сохраняется в БД при удалении зоны и при отмене удаления</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="perenos-na-zavtra-zadachi-inogda-polnost">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="perenos-na-zavtra-zadachi-inogda-polnost">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">«Перенос на завтра» — задачи иногда полностью пропадали после переноса</span>
+              <div class="item-note">перенос пачки задач шлёт на сервер N независимых незасинхронизированных запросов; собственный realtime-эхо от самого быстрого из них мог запустить общий рефетch раньше, чем остальные долетели, и затирал ещё не долетевшую локальную правку наполовину обновлённым снимком с сервера. Теперь рефетч ждёт, пока все свои же незавершённые записи по переносу долетят, прежде чем перечитывать with сервера</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="nelzya-sozdat-dva-taska-s-odinakovym-naz">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="nelzya-sozdat-dva-taska-s-odinakovym-naz">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Нельзя создать два таска с одинаковым названием в доме — красная рамка</span>
+              <div class="item-note">новая фича: проверка на дубликат имени (без учёта регистра, по всему дому, не по зоне) при сохранении задачи — переиспользует существующую красную рамку названия, ту же что у пустого имени</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="uvedomlenie-vsem-v-dome-pri-perenose-zad">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="uvedomlenie-vsem-v-dome-pri-perenose-zad">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Уведомление всем в доме при переносе задач на завтра</span>
+              <div class="item-note">новая фича: раньше об этом узнавал только тот, кто нажал «перенести» — теперь остальным приходит «X moved N tasks to tomorrow», как у добавления задачи</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="galochki-podvisali-pri-bystrom-tape-nash">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="galochki-podvisali-pri-bystrom-tape-nash">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Галочки подвисали при быстром тапе — нашла и починила</span>
+              <div class="item-note">каждый тап на границе выполнено/не выполнено ставил свой независимый отложенный вызов (0.3с) — быстрая серия тапов копила очередь из настоящих переключений, которые потом разряжались по одному с сетевым запросом и пересортировкой на каждый. Теперь висит только один отложенный коммит, новый тап отменяет предыдущий, а сработавший применяется только если реальное состояние правда не совпадает с финальным видимым</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="peretaskivanie-taska-na-drugoi-den-week">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="peretaskivanie-taska-na-drugoi-den-week">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Перетаскивание таска на другой день (Week strip) вообще не сохранялось — нашла и починила</span>
+              <div class="item-note">второй, отдельный от «переноса на завтра» баг: drag-and-drop таска на другой день в полоске недели менял только локальное состояние, ни разу не писал в Supabase — выглядело перенесённым, пока следующая пересинхронизация тихо не откатывала обратно. Теперь сохраняется как надо + шлёт то же уведомление</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="prochesala-pokrytie-uvedomlenii-po-pryam">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="prochesala-pokrytie-uvedomlenii-po-pryam">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Прочесала покрытие уведомлений по прямому запросу</span>
+              <div class="item-note">добавлено: переименование зоны (только если название правда изменилось), удаление зоны, удаление таска, перетаскивание таска (см. выше), личный пинг «X assigned you a task» при СОЗДАНИИ нового таска на кого-то (раньше личный пинг был только при переназначении на редактировании, при создании — только общий тост). Уже было и подтверждено верным: лайк себя самого не уведомляет. Не тронула — не могу проверить без SQL, дублировать рискованно: вступление в дом, выход из дома, удаление участника, передача владения (всё через серверные RPC без исходников в репо — нужен SQL или подтверждение что уже работает)</div>
+              <span class="flag">новое, есть открытые вопросы</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="polnyi-audit-sohraneniya-na-server-po-pr">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="polnyi-audit-sohraneniya-na-server-po-pr">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Полный аудит сохранения на сервер по прямому запросу — прошлась по всем ~50 изменяющим функциям</span>
+              <div class="item-note">нашла третий случай той же болезни (после deleteZone и перетаскивания таска сегодня раньше): смена часа начала дня отменяла перенос задачи «на завтра» только локально, без сохранения на сервер. Починила тем же способом. Всё остальное (профиль, галочки/лайки, уведомления, таски, зоны, все auth/household RPC) уже сохраняется правильно — проверено по каждой функции. Специально НЕ считается багом: тема оформления, фильтры (My/Zone), премиум-кэш — это законно локальные вещи, не общие данные</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Дизайн / контент</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="ikonka-tabletki-dlya-nabora-zon-zadach">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ikonka-tabletki-dlya-nabora-zon-zadach">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Иконка «таблетки» для набора зон/задач</span>
+              <div class="item-note">ещё не нарисована</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="idei-ne-hozyaistvennyh-scenariev-ispolzo">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="idei-ne-hozyaistvennyh-scenariev-ispolzo">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Идеи не-хозяйственных сценариев использования</span>
+              <div class="item-note">открытый брейншторм, ничего не решено</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="sezonnye-ikonki-dlya-avatarok-polzovatel">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sezonnye-ikonki-dlya-avatarok-polzovatel">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Сезонные иконки для аватарок пользователей</span>
+              <div class="item-note">тыква на Хэллоуин уже есть как обычная эмодзи-аватарка — идея добавить больше сезонных вариантов. Ничего не спроектировано</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Бэкапы базы</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="pervyi-progon-ezhednevnogo-avtobekapa-ne">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="pervyi-progon-ezhednevnogo-avtobekapa-ne">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Первый прогон ежедневного автобэкапа — не подтверждён</span>
+              <div class="item-note">облачная задача chorescore-daily-db-backup, каждую ночь в 03:00 по её времени, шлёт zip со всеми таблицами сюда в чат — первый прогон сегодня ночью</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="diy-bekap-eto-tolko-dannye-json-ne-nasto">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="diy-bekap-eto-tolko-dannye-json-ne-nasto">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">DIY-бэкап — это только данные (JSON), не настоящий Postgres-бэкап</span>
+              <div class="item-note">нет point-in-time recovery и точного восстановления схемы/индексов из него; до сегодня бэкапов не было вообще (Free-тариф Supabase, pitr_enabled: false) — реальный вариант это Supabase Pro за $25/мес, выбрали токен вместо оплаты</div>
+              <span class="flag">осознанный компромисс</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Офлайн-режим</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="galki-v-samoletnom-rezhime-vizualno-stav">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="galki-v-samoletnom-rezhime-vizualno-stav">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Галки в самолётном режиме визуально ставятся, но не сохраняются</span>
+              <div class="item-note">toggleDone сразу меняет локальное состояние, фоновая запись в Supabase падает без сети, чекбокс не откатывается назад — выглядит выполненным, пока не перезагрузится, и тогда тихо пропадает</div>
+              <span class="flag">реальный гэп</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="reshenie-vybrano-lokalnaya-ochered-inkre">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="reshenie-vybrano-lokalnaya-ochered-inkre">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Решение выбрано: локальная очередь + инкрементальный RPC вместо перезаписи всего done_on</span>
+              <div class="item-note">как у конкурентов (Todoist/TickTick/OurHome-класс) — local-first с очередью, last-write-wins + аддитивные операции. toggle_task_like уже так устроен, syncDoneOn — нет (перезаписывает весь массив, что при офлайн-очереди рискует затереть чужие завершения)</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="pravilo-nachisleniya-ochkov-pri-oflain-k">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="pravilo-nachisleniya-ochkov-pri-oflain-k">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Правило начисления очков при офлайн-конфликте — проверено по реальному коду и подтверждено</span>
+              <div class="item-note">если 2 человека оффлайн отметили многоразовый таск по разу — кольцо заполнится и оба получат очко; если оба отметили одноразовый — тоже засчитается обоим. allTimePoints/periodPoints/taskShare проверяют членство в doneBy, не точное совпадение счётчика — работает без доп. кода</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="lokalnaya-ochered-nwpathmonitor-toggledo">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="lokalnaya-ochered-nwpathmonitor-toggledo">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Локальная очередь + NWPathMonitor + toggleDone переписан — сделано, не проверено вживую</span>
+              <div class="item-note">toggleDone теперь ставит одно из двух действий в очередь (UserDefaults JSON) вместо перезаписи всего done_on; флашится при появлении сети и один раз при холодном запуске</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="sql-dlya-add-task-completion-remove-task">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sql-dlya-add-task-completion-remove-task">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">SQL для add_task_completion / remove_task_completions_for_date — отправлен, не вставлен в SQL Editor</span>
+              <div class="item-note">типы колонок и стиль сверены напрямую с реальной БД и с уже работающим toggle_task_like, не наугад</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="indikator-n-izmenenii-ne-sinhronizirovan">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="indikator-n-izmenenii-ne-sinhronizirovan">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Индикатор «N изменений не синхронизировано» — не сделан</span>
+              <div class="item-note">пока просто тихо флашится, тост только при настоящей (не сетевой) ошибке — не приоритет, пока основной путь не подтверждён вживую</div>
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="realnyi-bag-v-sql-mnogorazovye-taski-ne">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="realnyi-bag-v-sql-mnogorazovye-taski-ne">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Реальный баг в SQL — многоразовые таски не складывались</span>
+              <div class="item-note">add_task_completion читал done_on в переменную, потом отдельно записывал — классическая гонка: если два устройства вызывают почти одновременно, второе может затереть первое вместо сложения. Починено одним атомарным UPDATE. Файл переслан заново, можно вставить поверх старого (CREATE OR REPLACE, безопасно)</div>
+              <span class="flag">нашла сама, до прогона</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="u-toggle-task-like-laiki-ta-zhe-gonka-te">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="u-toggle-task-like-laiki-ta-zhe-gonka-te">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">У toggle_task_like (лайки) та же гонка теоретически есть, не тронуто</span>
+              <div class="item-note">ниже риск (не влияет на очки), не проявлялось живьём — просто на заметку</div>
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Realtime после сворачивания приложения</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="laiki-ot-drugih-ne-prihodyat-na-telefone">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="laiki-ot-drugih-ne-prihodyat-na-telefone">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Лайки от других не приходят на телефоне, но приходят в симуляторе — найдена причина и починено</span>
+              <div class="item-note">нигде в приложении не было обработки сворачивания/разворачивания (scenePhase) — на реальном телефоне iOS замораживает фоновую сеть при сворачивании, в симуляторе процесс так не замораживается, поэтому баг был невидим там. Теперь при возврате в приложение принудительно переподключает realtime и подгружает данные заново</div>
+              <span class="flag">новое</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Вход / логин</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="obychnyi-vhod-suschestvuyuschim-akkaunto">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="obychnyi-vhod-suschestvuyuschim-akkaunto">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Обычный вход существующим аккаунтом</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="registraciya-novogo-akkaunta-email-kod-p">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="registraciya-novogo-akkaunta-email-kod-p">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Регистрация нового аккаунта (email → код → пароль)</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="forgot-password-celikom">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="forgot-password-celikom">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Forgot Password целиком</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="nevernyi-parol-tolko-krasnaya-ramka-bez">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="nevernyi-parol-tolko-krasnaya-ramka-bez">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Неверный пароль — только красная рамка, без тоста</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="net-takogo-akkaunta-krasnaya-ramka-tost">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="net-takogo-akkaunta-krasnaya-ramka-tost">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Нет такого аккаунта — красная рамка + тост «No account with that email»</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zaprosit-kod-vyiti-bez-parolya-snova-cre">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zaprosit-kod-vyiti-bez-parolya-snova-cre">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Запросить код → выйти без пароля → снова Create Account с тем же email — ведёт себя как новая регистрация, без «Email already in use»</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="holodnyi-zapusk-s-realnoi-sohranennoi-se">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="holodnyi-zapusk-s-realnoi-sohranennoi-se">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Холодный запуск с реальной сохранённой сессией на плохой сети — тост «Couldn&#x27;t reach the server» через 3 сек, не висит вечно</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="sign-out-snova-sign-in">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sign-out-snova-sign-in">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Sign Out → снова Sign In</span>
+              
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Уведомления</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="tochka-na-kolokolchike-gasnet-posle-proc">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="tochka-na-kolokolchike-gasnet-posle-proc">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Точка на колокольчике гаснет после прочтения и не загорается снова после перезапуска</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="udalennoe-uvedomlenie-ne-vozvraschaetsya">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="udalennoe-uvedomlenie-ne-vozvraschaetsya">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Удалённое уведомление не возвращается после перезапуска (только у себя — другие члены дома его ещё видят)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ikonka-prochitannogo-uvedomleniya-seraya">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ikonka-prochitannogo-uvedomleniya-seraya">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Иконка прочитанного уведомления серая, непрочитанного — фиолетовая (не всё уведомление тусклое)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="novoe-uvedomlenie-ostaetsya-fioletovym-p">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="novoe-uvedomlenie-ostaetsya-fioletovym-p">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Новое уведомление остаётся фиолетовым, пока экран открыт — сереет только когда выходишь с экрана, не в момент открытия</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="uvedomleniya-starshe-30-dnei-realno-isch">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="uvedomleniya-starshe-30-dnei-realno-isch">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Уведомления старше 30 дней реально исчезают из базы (не только скрыты у себя)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="novoe-uvedomlenie-laik-novyi-uchastnik-z">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="novoe-uvedomlenie-laik-novyi-uchastnik-z">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Новое уведомление (лайк/новый участник/задача) появляется в списке и зажигает точку на колокольчике без выхода-входа на экран</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="udalit-vse-uvedomleniya-podryad-pokazyva">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="udalit-vse-uvedomleniya-podryad-pokazyva">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Удалить все уведомления подряд — показывается «All caught up!», не пустой белый экран</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="tap-na-uvedomlenie-pro-zadachu-kotoruyu">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="tap-na-uvedomlenie-pro-zadachu-kotoruyu">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Тап на уведомление про задачу, которую уже удалили в другом месте — просто закрывает панель, не виснет и не крашит</span>
+              
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Account (иконка в шапке)</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="ikonka-otkryvaet-account">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ikonka-otkryvaet-account">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Иконка открывает Account</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="smena-email-kod-v-2-shaga-v-odnom-ekrane">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="smena-email-kod-v-2-shaga-v-odnom-ekrane">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Смена email — код в 2 шага в одном экране (не ссылка), таймер на повторную отправку, закрытие сбрасывает флоу</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="smena-parolya-realno-proveryaet-tekuschi">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="smena-parolya-realno-proveryaet-tekuschi">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Смена пароля — реально проверяет текущий пароль (неверный → ошибка именно на этом поле)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="sign-out-delete-account-rabotayut">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sign-out-delete-account-rabotayut">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Sign Out, Delete Account работают</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="invait-koda-i-join-leave-tam-bolshe-net">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="invait-koda-i-join-leave-tam-bolshe-net">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Инвайт-кода и Join/Leave там больше нет (переехали)</span>
+              
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Manage Household</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="sebya-vidno-v-spiske-lyudei-s-metkoi-me">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sebya-vidno-v-spiske-lyudei-s-metkoi-me">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Себя видно в списке людей с меткой «me», заголовок «People in the House»</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ot-vladelca-invait-kod-spisok-lyudei-sva">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ot-vladelca-invait-kod-spisok-lyudei-sva">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">От владельца: инвайт-код, список людей, свайп-удаление, Join/Leave</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ot-ne-vladelca-spisok-lyudei-bez-svaipa">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ot-ne-vladelca-spisok-lyudei-bez-svaipa">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">От не-владельца: список людей без свайпа, заголовок «Household», Join/Leave доступны</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="invait-kod-zalochen-na-limite-free-2-che">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="invait-kod-zalochen-na-limite-free-2-che">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Инвайт-код залочен на лимите free (2 человека)</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="kartochka-ya-v-spiske-lyudei-toi-zhe-vys">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="kartochka-ya-v-spiske-lyudei-toi-zhe-vys">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Карточка «я» в списке людей той же высоты, что и остальные (была выше)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="drugoi-uchastnik-prisoedinilsya-po-kodu">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="drugoi-uchastnik-prisoedinilsya-po-kodu">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Другой участник присоединился по коду — виден без выхода-входа на экран (realtime)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Join a Different Household</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="tap-join-srazu-pokazyvaet-leave-this-hou">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="tap-join-srazu-pokazyvaet-leave-this-hou">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Тап «Join» сразу показывает «Leave This Household?» (до проверки кода)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="polnyi-dom-tost-household-is-full-posle">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="polnyi-dom-tost-household-is-full-posle">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Полный дом — тост «Household is full» после подтверждения</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="nevernyi-kod-tost-invalid-invite-code">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="nevernyi-kod-tost-invalid-invite-code">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Неверный код — тост «Invalid invite code»</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="knopka-podtverzhdeniya-nazyvaetsya-switc">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="knopka-podtverzhdeniya-nazyvaetsya-switc">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Кнопка подтверждения называется «Switch», не «Join»</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Зоны</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="menshe-limita-redaktirovanie-kak-obychno">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="menshe-limita-redaktirovanie-kak-obychno">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Меньше лимита — редактирование как обычно</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="dobavlenie-6-i-zony-blokiruetsya-dazhe-p">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="dobavlenie-6-i-zony-blokiruetsya-dazhe-p">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Добавление 6-й зоны блокируется даже при быстром двойном тапе (проверка теперь и на сервере)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zona-dobavlennaya-drugim-uchastnikom-poy">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zona-dobavlennaya-drugim-uchastnikom-poy">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Зона, добавленная другим участником, появляется без выхода-входа на экран (realtime)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zona-udalennaya-drugim-uchastnikom-propa">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zona-udalennaya-drugim-uchastnikom-propa">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Зона, удалённая другим участником, пропадает без выхода-входа на экран (realtime)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="pereimenovanie-smena-ikonki-zony-drugim">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="pereimenovanie-smena-ikonki-zony-drugim">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Переименование/смена иконки зоны другим участником видна без выхода-входа (realtime)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Задачи — realtime</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="novaya-zadacha-ot-drugogo-uchastnika-poy">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="novaya-zadacha-ot-drugogo-uchastnika-poy">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Новая задача от другого участника появляется без выхода-входа на экран</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="otmetka-sdelano-ot-drugogo-uchastnika-vi">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="otmetka-sdelano-ot-drugogo-uchastnika-vi">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Отметка «сделано» от другого участника видна без выхода-входа (прогресс дня, чекбокс)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="laik-ot-drugogo-uchastnika-viden-bez-vyh">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="laik-ot-drugogo-uchastnika-viden-bez-vyh">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Лайк от другого участника виден без выхода-входа — это то, что раньше выглядело «мгновенным», но по факту не синхронизировалось между устройствами вообще</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zadacha-udalennaya-arhivirovannaya-drugi">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zadacha-udalennaya-arhivirovannaya-drugi">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Задача, удалённая/архивированная другим участником, пропадает без выхода-входа</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="pereimenovanie-perenos-zadachi-drugim-uc">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="pereimenovanie-perenos-zadachi-drugim-uc">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Переименование/перенос задачи другим участником виден без выхода-входа</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Мелочи</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="ikonki-v-shapkah-account-kolokolchik-tro">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ikonki-v-shapkah-account-kolokolchik-tro">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Иконки в шапках (Account/колокольчик/трофей) визуально ровные</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="rate-us-contact-us-report-a-bug-otkryvay">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="rate-us-contact-us-report-a-bug-otkryvay">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Rate Us / Contact Us / Report a Bug открывают почту / App Store</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="novye-ikonki-ne-obrezany-cvet-korrektnyi">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="novye-ikonki-ne-obrezany-cvet-korrektnyi">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Новые иконки не обрезаны, цвет корректный</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ten-tosta-v-temnoi-teme-priglushena-ne-b">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ten-tosta-v-temnoi-teme-priglushena-ne-b">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Тень тоста в тёмной теме приглушена, не бросается в глаза</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="knopki-vnizu-ekranov-na-odnom-urovne-ema">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="knopki-vnizu-ekranov-na-odnom-urovne-ema">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Кнопки внизу экранов на одном уровне (Email, Password, Person, Task, Zones, Subscription, Join Household — не выше/ниже, чем Account)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="vybor-cveta-v-profile-set-up-your-profil">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="vybor-cveta-v-profile-set-up-your-profil">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Выбор цвета в профиле (Set Up Your Profile / Edit Person) прячет клавиатуру</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="klaviatura-zakryvaetsya-po-tapu-voobsche">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="klaviatura-zakryvaetsya-po-tapu-voobsche">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Клавиатура закрывается по тапу вообще где угодно на экране, не только в пустоте</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="kalendar-pereklyuchenie-na-vkladku-bez-p">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="kalendar-pereklyuchenie-na-vkladku-bez-p">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Календарь — переключение на вкладку без подтормаживания</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="email-password-subscription-realno-animi">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="email-password-subscription-realno-animi">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Email/Password/Subscription реально анимированно наезжают/уезжают справа (были без анимации)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="tosty-i-podpisi-bez-lishnei-tochki-v-kon">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="tosty-i-podpisi-bez-lishnei-tochki-v-kon">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Тосты и подписи без лишней точки в конце (кроме Legal-текстов)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ikonki-uvedomlenii-peresmotret-i-pomenya">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ikonki-uvedomlenii-peresmotret-i-pomenya">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Иконки уведомлений — пересмотреть и поменять</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="tap-vne-kartochki-zakryvaet-otkrytye-kno">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="tap-vne-kartochki-zakryvaet-otkrytye-kno">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Тап вне карточки закрывает открытые кнопки редактировать/удалить — в Manage Household, Manage Zones и Tasks</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Покупки · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="monthly-podpiska">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="monthly-podpiska">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Monthly подписка</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="annual-podpiska-probnyi-period">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="annual-podpiska-probnyi-period">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Annual подписка (пробный период)</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="lifetime-24-99">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="lifetime-24-99">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Lifetime ($24.99)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="restore-purchase-dlya-vseh-treh-osobenno">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="restore-purchase-dlya-vseh-treh-osobenno">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Restore Purchase для всех трёх, особенно Lifetime</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="supabase-people-is-premium-stalo-true-po">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="supabase-people-is-premium-stalo-true-po">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Supabase → people → is_premium стало true после покупки</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ekran-lifetime-you-bought-lifetime-acces">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ekran-lifetime-you-bought-lifetime-acces">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Экран Lifetime: «You bought Lifetime access», не «Manage Subscription»</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="kupit-monthly-potom-srazu-annual-ili-nao">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="kupit-monthly-potom-srazu-annual-ili-nao">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Купить Monthly, потом сразу Annual (или наоборот) — апгрейд/смена плана проходит нормально, не задваивается</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="kupit-na-odnom-ustroistve-otkryt-tot-zhe">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="kupit-na-odnom-ustroistve-otkryt-tot-zhe">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Купить на одном устройстве, открыть тот же аккаунт на другом — премиум подтягивается там тоже</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Manage Household (premium) · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="invait-kod-na-premium-dome-pozvolyaet-do">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="invait-kod-na-premium-dome-pozvolyaet-do">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Инвайт-код на premium-доме позволяет до 10 человек (не блокируется раньше)</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="na-premium-dome-limit-10-dva-cheloveka-o">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="na-premium-dome-limit-10-dva-cheloveka-o">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">На premium-доме (лимит 10) два человека одновременно жмут Join с последним свободным местом — дом не превышает 10, даже если оба тапнули почти одновременно</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="vladelec-vyhodit-vladenie-perehodit-sled">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="vladelec-vyhodit-vladenie-perehodit-sled">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Владелец выходит → владение переходит следующему по дате</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="zadacha-ushedshego-uchastnika-otkryt-pik">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="zadacha-ushedshego-uchastnika-otkryt-pik">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Задача ушедшего участника: открыть → пикер людей пустой (не выбран автоматически) → Save с одним оставшимся в доме назначает на него, с несколькими — требует явно выбрать (на premium-доме людей больше 2, проверить ветку с выбором из нескольких)</span>
+              
+              <span class="flag">подтверждено на free</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Зоны (после того как был premium) · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="bolshe-5-zon-dom-upal-obratno-na-free-pe">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="bolshe-5-zon-dom-upal-obratno-na-free-pe">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Больше 5 зон, дом упал обратно на free — первые 5 зон редактируемые, шестая+ — только удаление</span>
+              
+              <span class="flag">поправлено</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="na-aktivnom-premium-dobavlenie-6-i-7-i-1">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="na-aktivnom-premium-dobavlenie-6-i-7-i-1">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">На активном premium — добавление 6-й, 7-й, 10-й зоны проходит без блокировки и без баннера</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>После отмены подписки · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="srazu-posle-cancel-subscription-premium">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="srazu-posle-cancel-subscription-premium">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Сразу после Cancel Subscription премиум ещё активен — пропадает не мгновенно, а в конце оплаченного периода</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="posle-istecheniya-perioda-v-sandbox-byst">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="posle-istecheniya-perioda-v-sandbox-byst">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">После истечения периода (в sandbox — быстро, минуты) Settings → Premium сам показывает Free, без переустановки приложения</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="posle-istecheniya-limity-snova-rabotayut">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="posle-istecheniya-limity-snova-rabotayut">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">После истечения — лимиты снова работают: баннер за лишние зоны, блокировка редактирования зон сверх 5, блокировка добавления новых</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="people-is-premium-v-supabase-ne-otkatyva">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="people-is-premium-v-supabase-ne-otkatyva">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">people.is_premium в Supabase НЕ откатывается сам после истечения — известный незакрытый гэп, просто подтвердить что воспроизводится как в бэклоге</span>
+              
+              <span class="flag">известный гэп</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="restore-purchase-posle-otmeny-ne-vozvras">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="restore-purchase-posle-otmeny-ne-vozvras">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Restore Purchase после отмены не возвращает премиум обратно по ошибке</span>
+              
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Realtime — общие сценарии</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="svernut-prilozhenie-na-minutu-chto-to-po">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="svernut-prilozhenie-na-minutu-chto-to-po">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Свернуть приложение на минуту, что-то поменять с другого устройства, вернуться — изменение уже видно, не нужно перезаходить</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="kratko-vyklyuchit-wifi-internet-vklyuchi">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="kratko-vyklyuchit-wifi-internet-vklyuchi">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Кратко выключить wifi/интернет, включить обратно — realtime сам переподключается, без перезапуска приложения</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="posle-switch-leave-join-v-drugoi-dom-izm">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="posle-switch-leave-join-v-drugoi-dom-izm">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">После Switch/Leave/Join в другой дом — изменения из СТАРОГО дома больше не долетают (подписка реально переключилась, не задвоилась)</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="sign-out-sign-in-drugim-akkauntom-na-eto">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="sign-out-sign-in-drugim-akkauntom-na-eto">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Sign Out → Sign In другим аккаунтом на этом же устройстве — не видно чужих realtime-обновлений от предыдущего аккаунта</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="bystro-dobavit-izmenit-neskolko-veschei">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="bystro-dobavit-izmenit-neskolko-veschei">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Быстро добавить/изменить несколько вещей подряд (3+ задачи за секунду) — итоговое состояние на другом устройстве корректное, ничего не потерялось</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Гонки и края — дом и зоны</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="dva-cheloveka-odnovremenno-zhmut-join-na">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="dva-cheloveka-odnovremenno-zhmut-join-na">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Два человека одновременно жмут Join на инвайт-код с последним свободным местом — проходит только один, второй видит «Household is full»</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="vladelec-edinstvennyi-v-dome-udalyaet-sv">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="vladelec-edinstvennyi-v-dome-udalyaet-sv">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Владелец, единственный в доме, удаляет свой аккаунт — не остаётся висящего битого дома</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="udalenie-uchastnika-s-zadachami-naznache">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="udalenie-uchastnika-s-zadachami-naznache">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Удаление участника с задачами, назначенными только на него — задачи остаются тусклыми, доступны для переназначения</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="vladelec-sbrasyvaet-invait-kod-pryamo-v">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="vladelec-sbrasyvaet-invait-kod-pryamo-v">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Владелец сбрасывает инвайт-код прямо в момент, когда кто-то вводит старый код — тот получает «Invalid invite code», не зависает</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="undo-udaleniya-zony-vozvraschaet-i-samu">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="undo-udaleniya-zony-vozvraschaet-i-samu">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Undo удаления зоны возвращает и саму зону, и задачи, которые вместе с ней архивировались</span>
+              
+              
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Края — задачи и данные</h2><span class="card-count"></span></div>
+      <ul class="items">
+        <li class="item" data-id="vypolnenie-perenos-zadachi-rovno-v-momen">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="vypolnenie-perenos-zadachi-rovno-v-momen">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Выполнение/перенос задачи ровно в момент смены часа Day Start — засчитывается на правильный день</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ochen-dlinnoe-nazvanie-zadachi-ne-lomaet">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ochen-dlinnoe-nazvanie-zadachi-ne-lomaet">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Очень длинное название задачи не ломает вёрстку карточки/списка</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="ochen-dlinnoe-imya-cheloveka-ne-lomaet-a">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="ochen-dlinnoe-imya-cheloveka-ne-lomaet-a">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Очень длинное имя человека не ломает аватарки/списки/шапки</span>
+              
+              
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="force-quit-prilozheniya-srazu-posle-save">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="force-quit-prilozheniya-srazu-posle-save">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Force-quit приложения сразу после Save (задача/зона/профиль) — при следующем запуске данные не битые</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+        <li class="item" data-id="polnyi-airplane-mode-ne-tolko-wi-fi-off">
+          <label class="item-label">
+            <input type="checkbox" class="cb" data-id="polnyi-airplane-mode-ne-tolko-wi-fi-off">
+            <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="item-body">
+              <span class="item-text">Полный Airplane Mode (не только Wi-Fi офф) — приложение не крашит, показывает разумные тосты вместо зависания</span>
+              
+              <span class="flag">впервые</span>
+            </span>
+          </label>
+        </li>
+      </ul>
+    </section>  </div>
+  <footer>Галочки хранятся в Supabase (та же база, что у приложения) — общие для всех, кто открывает эту страницу, не привязаны к браузеру.</footer>
+</div>
+
+<script>
+  // Same Supabase project the iOS app uses — anon key is the public one
+  // already shipped in the app binary, safe by design (RLS scopes what it
+  // can touch; see backlog_items.sql for the policy added specifically for
+  // this one table). This page only ever reads/writes `backlog_items`
+  // (id -> checked) — the actual item text lives in this file's own HTML,
+  // authored/edited by hand (or by Claude) and redeployed like any other
+  // page on this site, same as ChoreScore Backlog on Claude used to be a
+  // hand-maintained list of sections/items.
+  const SUPABASE_URL = "https://bcojibvfncbficjvxjdo.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_X8gY4YCjNoWJSVsSsu-JAg_3btKyGF5";
+
+  const syncNote = document.getElementById("syncNote");
+
+  function updateProgress() {
+    document.querySelectorAll("#sections section.card").forEach((card) => {
+      const boxes = card.querySelectorAll(".cb");
+      const done = Array.from(boxes).filter((b) => b.checked).length;
+      const countEl = card.querySelector(".card-count");
+      if (countEl) countEl.textContent = done + " / " + boxes.length;
+    });
+    const all = document.querySelectorAll("#sections .cb");
+    const done = Array.from(all).filter((b) => b.checked).length;
+    document.getElementById("progressCount").textContent = done + " / " + all.length;
+    document.getElementById("progressFill").style.width = (all.length ? (done / all.length * 100) : 0) + "%";
+  }
+
+  async function loadCheckedState() {
+    try {
+      const res = await fetch(SUPABASE_URL + "/rest/v1/backlog_items?select=id,checked&checked=eq.true", {
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY
+        }
+      });
+      if (!res.ok) throw new Error("status " + res.status);
+      const rows = await res.json();
+      const checkedIds = new Set(rows.map((r) => r.id));
+      document.querySelectorAll("#sections .cb").forEach((cb) => {
+        if (checkedIds.has(cb.dataset.id)) cb.checked = true;
+      });
+      syncNote.textContent = "";
+      updateProgress();
+    } catch (e) {
+      syncNote.textContent = "Не удалось загрузить отметки — показан пустой список, ничего не потеряно (см. базу).";
+    }
+  }
+
+  async function saveChecked(id, checked) {
+    syncNote.textContent = "Сохраняю…";
+    try {
+      const res = await fetch(SUPABASE_URL + "/rest/v1/backlog_items?on_conflict=id", {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "resolution=merge-duplicates,return=minimal"
+        },
+        body: JSON.stringify({ id: id, checked: checked, updated_at: new Date().toISOString() })
+      });
+      if (!res.ok) throw new Error("status " + res.status);
+      syncNote.textContent = "";
+    } catch (e) {
+      syncNote.textContent = "Не сохранилось — попробуй ещё раз (проверь интернет).";
+    }
+  }
+
+  document.addEventListener("change", (e) => {
+    if (!e.target || !e.target.classList.contains("cb")) return;
+    updateProgress();
+    saveChecked(e.target.dataset.id, e.target.checked);
+  });
+
+  loadCheckedState();
+</script>
+</body>
+</html>
