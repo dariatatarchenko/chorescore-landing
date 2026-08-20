@@ -57,13 +57,26 @@
     background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
     box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden;
   }
-  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 14px 16px 10px; }
-  .card-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; }
+  .card-head {
+    display: flex; align-items: center; gap: 8px; padding: 14px 16px 10px;
+    cursor: pointer; user-select: none;
+  }
+  .card-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; flex: 1; }
+  .card-head .chevron {
+    font-size: 11px; color: var(--text-muted); transition: transform 0.15s ease; flex-shrink: 0;
+  }
+  section.card.collapsed .card-head .chevron { transform: rotate(-90deg); }
+  section.card.collapsed ul.items { display: none; }
   .card-count {
     font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums;
     font-size: 12px; color: var(--text-muted); flex-shrink: 0;
   }
   ul.items { list-style: none; margin: 0; padding: 0 6px 6px; }
+  .note-toggle {
+    display: inline-block; margin-top: 4px; background: none; border: none; padding: 0;
+    font-size: 12px; color: var(--accent); cursor: pointer; font-family: inherit;
+  }
+  .item.note-open .note-toggle .chevron-inline { transform: rotate(0deg); }
   .item { padding: 2px 4px; }
   .item-label { display: flex; align-items: flex-start; gap: 11px; padding: 10px 6px; border-radius: 9px; cursor: pointer; user-select: none; }
   .item-label:hover { background: var(--surface-2); }
@@ -103,7 +116,11 @@
   </header>
   <div id="sections">
     <section class="card">
-      <div class="card-head"><h2>App Store / релиз</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>App Store / релиз</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="bild-prikrepit-k-versii-i-otpravit-na-re">
           <label class="item-label">
@@ -111,8 +128,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Билд прикрепить к версии и отправить на ревью</span>
-              <div class="item-note">ничего из пунктов ниже это не блокирует</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>ничего из пунктов ниже это не блокирует</div>
             </span>
           </label>
         </li>
@@ -122,8 +139,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Банковский счёт — на проверке у Apple (загрузка паспорта)</span>
-              <div class="item-note">статус не подтверждён</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>статус не подтверждён</div>
             </span>
           </label>
         </li>
@@ -144,15 +161,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">EU trader / DSA статус — нужен почтовый ящик (P.O. Box)</span>
-              <div class="item-note">форма Apple принимает P.O. Box</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>форма Apple принимает P.O. Box</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Покупки / премиум</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Покупки / премиум</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="verify-purchase-edge-function-zadeploena">
           <label class="item-label">
@@ -193,15 +214,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Премиум никогда не отзывается автоматически (отмена/рефанд)</span>
-              <div class="item-note">нужен App Store Server Notifications V2, не срочно — реальных платежей ещё нет</div>
               <span class="flag">реальный гэп</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>нужен App Store Server Notifications V2, не срочно — реальных платежей ещё нет</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Нужен реальный телефон</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Нужен реальный телефон</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="owner-transfer-pri-vyhode-vladelca">
           <label class="item-label">
@@ -209,8 +234,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Owner-transfer при выходе владельца</span>
-              <div class="item-note">нужны 2 реальных аккаунта, ни разу не тестировалось</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>нужны 2 реальных аккаунта, ни разу не тестировалось</div>
             </span>
           </label>
         </li>
@@ -220,8 +245,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Живой ретест: первая попытка verifyOTP при смене email больше не должна падать</span>
-              <div class="item-note">причина найдена — известный баг GoTrue (supabase/auth-js#798), исправлено тихим повтором в коде, ни разу не проверено на реальном повторе бага</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>причина найдена — известный баг GoTrue (supabase/auth-js#798), исправлено тихим повтором в коде, ни разу не проверено на реальном повторе бага</div>
             </span>
           </label>
         </li>
@@ -231,8 +256,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">ChangePasswordView — реальная смена пароля + live-проверка текущего пароля по уходу с поля</span>
-              <div class="item-note">код собирается чисто, end-to-end не прогонялся</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>код собирается чисто, end-to-end не прогонялся</div>
             </span>
           </label>
         </li>
@@ -242,8 +267,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Email/Password экраны — анимация открытия/закрытия (наезжает/уезжает справа)</span>
-              <div class="item-note">починила zIndex-коллизию, не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>починила zIndex-коллизию, не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -253,8 +278,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Календарь — тормоза при переключении на вкладку</span>
-              <div class="item-note">убрала тройной пересчёт + добавила кэш, дальше нашла и точечно почистила инвалидацию кэша по отметкам — тоже не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>убрала тройной пересчёт + добавила кэш, дальше нашла и точечно почистила инвалидацию кэша по отметкам — тоже не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -264,8 +289,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Realtime-синхронизация между участниками дома</span>
-              <div class="item-note">люди/зоны/задачи/лайки/уведомления должны обновляться сами по себе на втором устройстве. REPLICA IDENTITY FULL применена, найдена и починена утечка памяти (несколько параллельных подписок не закрывались и копились — реально убило приложение по памяти), добавлена досинхронизация при каждом переподключении. Ни разу не проверено долгой сессией вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>люди/зоны/задачи/лайки/уведомления должны обновляться сами по себе на втором устройстве. REPLICA IDENTITY FULL применена, найдена и починена утечка памяти (несколько параллельных подписок не закрывались и копились — реально убило приложение по памяти), добавлена досинхронизация при каждом переподключении. Ни разу не проверено долгой сессией вживую</div>
             </span>
           </label>
         </li>
@@ -275,8 +300,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Лимит зон (5 на free) теперь проверяется и на сервере</span>
-              <div class="item-note">раньше можно было проскочить лимит двойным тапом из формы задачи — завели SQL-функцию add_zone с реальной проверкой, нужно подтвердить что лимит держит на реальном устройстве</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>раньше можно было проскочить лимит двойным тапом из формы задачи — завели SQL-функцию add_zone с реальной проверкой, нужно подтвердить что лимит держит на реальном устройстве</div>
             </span>
           </label>
         </li>
@@ -286,8 +311,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Редактирование зон сверх лимита теперь точечное, не блокирует всё подряд</span>
-              <div class="item-note">новое: раньше при превышении лимита блокировалось редактирование ВСЕХ зон в доме; теперь первые 5 (по порядку создания) остаются редактируемыми, только 6-я и дальше — только удаление. Не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>новое: раньше при превышении лимита блокировалось редактирование ВСЕХ зон в доме; теперь первые 5 (по порядку создания) остаются редактируемыми, только 6-я и дальше — только удаление. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -297,8 +322,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Прочитанные уведомления — только серая иконка</span>
-              <div class="item-note">новое: убрали точку-индикатор и подсветку фона у непрочитанных, оставили только цвет иконки (фиолетовая/серая). Пометка «прочитано» теперь срабатывает при закрытии экрана уведомлений, а не при открытии. Не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>новое: убрали точку-индикатор и подсветку фона у непрочитанных, оставили только цвет иконки (фиолетовая/серая). Пометка «прочитано» теперь срабатывает при закрытии экрана уведомлений, а не при открытии. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -308,8 +333,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Переназначение задач ушедшего участника</span>
-              <div class="item-note">открытие задачи, у которой все назначенные — бывшие/удалённые участники, больше не сохраняет обратно тот же мёртвый id. Пикер всегда пустой — ни автовыбора, ни предвыбора; Save с одним оставшимся в доме назначает на него через штатный fallback, с несколькими — форма требует явно выбрать. Работает одинаково на free и premium. Подтверждено на free, premium — нет</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>открытие задачи, у которой все назначенные — бывшие/удалённые участники, больше не сохраняет обратно тот же мёртвый id. Пикер всегда пустой — ни автовыбора, ни предвыбора; Save с одним оставшимся в доме назначает на него через штатный fallback, с несколькими — форма требует явно выбрать. Работает одинаково на free и premium. Подтверждено на free, premium — нет</div>
             </span>
           </label>
         </li>
@@ -319,8 +344,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Дома-сироты при выходе/удалении аккаунта — реально почищено</span>
-              <div class="item-note">delete_own_account, leave_household и switch_household_by_code теперь удаляют дом (каскадом зоны/задачи/уведомления), если уходящий был там последним. Убрали 19 уже накопившихся с начала августа. Дважды подтверждено вживую (свежий аккаунт → зона-метка → удаление → дома нет)</div>
               <span class="flag">подтверждено</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>delete_own_account, leave_household и switch_household_by_code теперь удаляют дом (каскадом зоны/задачи/уведомления), если уходящий был там последним. Убрали 19 уже накопившихся с начала августа. Дважды подтверждено вживую (свежий аккаунт → зона-метка → удаление → дома нет)</div>
             </span>
           </label>
         </li>
@@ -330,8 +355,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Уведомление при удалении аккаунта</span>
-              <div class="item-note">раньше при самостоятельном удалении остальные в доме не узнавали вообще ничего — теперь приходит «X deleted their account», как при Leave/Remove. Не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>раньше при самостоятельном удалении остальные в доме не узнавали вообще ничего — теперь приходит «X deleted their account», как при Leave/Remove. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -341,8 +366,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Retraction уведомления «Task completed» при снятии галочки</span>
-              <div class="item-note">не работало — у notifications вообще не было RLS-политики на DELETE (ни для этого, ни для 30-дневной автозачистки). Политика добавлена. Полный цикл после фикса (отметить → снять → уведомление реально пропало) не прогоняли</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>не работало — у notifications вообще не было RLS-политики на DELETE (ни для этого, ни для 30-дневной автозачистки). Политика добавлена. Полный цикл после фикса (отметить → снять → уведомление реально пропало) не прогоняли</div>
             </span>
           </label>
         </li>
@@ -352,8 +377,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Sign In/Sign Up переключалка перенесена в заголовок</span>
-              <div class="item-note">была снизу экрана с жирным текстом, теперь в самой строке «Sign In»/шага регистрации, справа, фиолетовым обычным весом — как «Forgot password». У Forgot Password такой ссылки больше нет вообще. Не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>была снизу экрана с жирным текстом, теперь в самой строке «Sign In»/шага регистрации, справа, фиолетовым обычным весом — как «Forgot password». У Forgot Password такой ссылки больше нет вообще. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -363,8 +388,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Экран загрузки — мерцающие звёздочки вместо спиннера</span>
-              <div class="item-note">разобрана на реальные суб-фигуры из bling-fill.svg (3 звёздочки-искры + 4 точки), каждая мигает по-своему; поднята выше на 60pt, пульс смещён в сторону увеличения, мерцают только звёздочки (точки статичны), починен реальный баг SwiftUI из-за которого анимация останавливалась после одного цикла. Не проверено вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>разобрана на реальные суб-фигуры из bling-fill.svg (3 звёздочки-искры + 4 точки), каждая мигает по-своему; поднята выше на 60pt, пульс смещён в сторону увеличения, мерцают только звёздочки (точки статичны), починен реальный баг SwiftUI из-за которого анимация останавливалась после одного цикла. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -374,8 +399,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Полный прогон чек-листа сегодняшних правок</span>
-              <div class="item-note">отдельный документ — ChoreScore Field Test, ссылка вверху этой страницы</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>отдельный документ — ChoreScore Field Test, ссылка вверху этой страницы</div>
             </span>
           </label>
         </li>
@@ -385,8 +410,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Обрезка второй строки в карточках задач (Week и Tasks)</span>
-              <div class="item-note">сначала заполняет строку по максимуму, потом ужимает имя (не короче 5 символов + …, только в Week), и только потом зону. Заняло 3 захода — резиновость нужно было проставить на каждом уровне вложенности, не только снаружи. Не проверено вживую</div>
               <span class="flag">впервые</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>сначала заполняет строку по максимуму, потом ужимает имя (не короче 5 символов + …, только в Week), и только потом зону. Заняло 3 захода — резиновость нужно было проставить на каждом уровне вложенности, не только снаружи. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -396,8 +421,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Лимит имени человека и названия зоны — 25 символов</span>
-              <div class="item-note">счётчик как у названия задачи, инпуты не двигались. Не проверено вживую</div>
               <span class="flag">впервые</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>счётчик как у названия задачи, инпуты не двигались. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -407,8 +432,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Обрезание эмодзи-аватарки в кнопке «My Tasks» (18pt)</span>
-              <div class="item-note">4 захода на эту проблему — теперь у текста-эмодзи явно увеличенная рамка для рендера (1.4×), сама кнопка и видимый размер кружка не тронуты. Починено по реальному скриншоту, не вслепую. Не проверено вживую</div>
               <span class="flag">впервые</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>4 захода на эту проблему — теперь у текста-эмодзи явно увеличенная рамка для рендера (1.4×), сама кнопка и видимый размер кружка не тронуты. Починено по реальному скриншоту, не вслепую. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -418,8 +443,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Офлайн-очередь для лайков сделана через существующую toggle_task_like (не новые функции)</span>
-              <div class="item-note">починена та же гонка, что и у завершений — одним атомарным UPDATE RETURNING. Файл SQL финальный, отправлен. Не проверено вживую</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>починена та же гонка, что и у завершений — одним атомарным UPDATE RETURNING. Файл SQL финальный, отправлен. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -429,8 +454,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Завершение таска теперь двигает его в списке у ВСЕХ пользователей, не только у того кто нажал</span>
-              <div class="item-note">loadHousehold сравнивает старое/новое состояние завершений при каждой синхронизации и подвигает таск, если кто угодно пересёк границу выполнено/не выполнено. От лайков — никогда. Не проверено вживую</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>loadHousehold сравнивает старое/новое состояние завершений при каждой синхронизации и подвигает таск, если кто угодно пересёк границу выполнено/не выполнено. От лайков — никогда. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -440,8 +465,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Список тасков скакал от лайков и любых чужих действий</span>
-              <div class="item-note">у запроса тасков не было .order() — Postgres мог вернуть их в разном порядке при каждой синхронизации. Задан жёсткий порядок по id. Не проверено вживую</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>у запроса тасков не было .order() — Postgres мог вернуть их в разном порядке при каждой синхронизации. Задан жёсткий порядок по id. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -451,8 +476,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Статистика ломалась от длинных имён/названий (до 25 символов)</span>
-              <div class="item-note">4 места без обрезки в три точки — баннер MVP, таблица лидеров, и два графика (House Architect, Hot Zones), где обрезка была, но .fixedSize() её блокировал. Все починены. Не проверено вживую</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>4 места без обрезки в три точки — баннер MVP, таблица лидеров, и два графика (House Architect, Hot Zones), где обрезка была, но .fixedSize() её блокировал. Все починены. Не проверено вживую</div>
             </span>
           </label>
         </li>
@@ -462,8 +487,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">«Связь пропала» / «Couldn&#x27;t refresh everything» тосты — заменены на тихий приглушенный баннер внизу</span>
-              <div class="item-note">по прямому запросу: тосты — только для настоящих ошибок, не для мельтешения. Теперь фоновые проблемы (не долетела часть данных, realtime не подключился, реально нет сети) копятся в один флаг connectionTrouble с 5-секундной задержкой — если само прошло за 5 сек, баннер вообще не покажется. Плюс: loadHousehold теперь реально повторяет попытку один раз (раньше «will retry automatically» было пустыми словами, ничего не повторяло)</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>по прямому запросу: тосты — только для настоящих ошибок, не для мельтешения. Теперь фоновые проблемы (не долетела часть данных, realtime не подключился, реально нет сети) копятся в один флаг connectionTrouble с 5-секундной задержкой — если само прошло за 5 сек, баннер вообще не покажется. Плюс: loadHousehold теперь реально повторяет попытку один раз (раньше «will retry automatically» было пустыми словами, ничего не повторяло)</div>
             </span>
           </label>
         </li>
@@ -473,8 +498,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Таски видны в Week, но пропадали из списка Tasks — нашла и починила</span>
-              <div class="item-note">deleteZone архивировал задачи только локально, ни разу не сохраняя archived_at на сервер (та же дыра есть и в веб-версии) — следующий realtime-рефетч тихо разархивировал их обратно с зоной, которой больше нет; Tasks-таб такие не показывает вообще (ищет только среди существующих зон), а Week/Calendar зону не проверяет и продолжал их планировать. Теперь archived_at реально сохраняется в БД при удалении зоны и при отмене удаления</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>deleteZone архивировал задачи только локально, ни разу не сохраняя archived_at на сервер (та же дыра есть и в веб-версии) — следующий realtime-рефетч тихо разархивировал их обратно с зоной, которой больше нет; Tasks-таб такие не показывает вообще (ищет только среди существующих зон), а Week/Calendar зону не проверяет и продолжал их планировать. Теперь archived_at реально сохраняется в БД при удалении зоны и при отмене удаления</div>
             </span>
           </label>
         </li>
@@ -484,8 +509,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">«Перенос на завтра» — задачи иногда полностью пропадали после переноса</span>
-              <div class="item-note">перенос пачки задач шлёт на сервер N независимых незасинхронизированных запросов; собственный realtime-эхо от самого быстрого из них мог запустить общий рефетch раньше, чем остальные долетели, и затирал ещё не долетевшую локальную правку наполовину обновлённым снимком с сервера. Теперь рефетч ждёт, пока все свои же незавершённые записи по переносу долетят, прежде чем перечитывать with сервера</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>перенос пачки задач шлёт на сервер N независимых незасинхронизированных запросов; собственный realtime-эхо от самого быстрого из них мог запустить общий рефетch раньше, чем остальные долетели, и затирал ещё не долетевшую локальную правку наполовину обновлённым снимком с сервера. Теперь рефетч ждёт, пока все свои же незавершённые записи по переносу долетят, прежде чем перечитывать with сервера</div>
             </span>
           </label>
         </li>
@@ -495,8 +520,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Нельзя создать два таска с одинаковым названием в доме — красная рамка</span>
-              <div class="item-note">новая фича: проверка на дубликат имени (без учёта регистра, по всему дому, не по зоне) при сохранении задачи — переиспользует существующую красную рамку названия, ту же что у пустого имени</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>новая фича: проверка на дубликат имени (без учёта регистра, по всему дому, не по зоне) при сохранении задачи — переиспользует существующую красную рамку названия, ту же что у пустого имени</div>
             </span>
           </label>
         </li>
@@ -506,8 +531,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Уведомление всем в доме при переносе задач на завтра</span>
-              <div class="item-note">новая фича: раньше об этом узнавал только тот, кто нажал «перенести» — теперь остальным приходит «X moved N tasks to tomorrow», как у добавления задачи</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>новая фича: раньше об этом узнавал только тот, кто нажал «перенести» — теперь остальным приходит «X moved N tasks to tomorrow», как у добавления задачи</div>
             </span>
           </label>
         </li>
@@ -517,8 +542,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Галочки подвисали при быстром тапе — нашла и починила</span>
-              <div class="item-note">каждый тап на границе выполнено/не выполнено ставил свой независимый отложенный вызов (0.3с) — быстрая серия тапов копила очередь из настоящих переключений, которые потом разряжались по одному с сетевым запросом и пересортировкой на каждый. Теперь висит только один отложенный коммит, новый тап отменяет предыдущий, а сработавший применяется только если реальное состояние правда не совпадает с финальным видимым</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>каждый тап на границе выполнено/не выполнено ставил свой независимый отложенный вызов (0.3с) — быстрая серия тапов копила очередь из настоящих переключений, которые потом разряжались по одному с сетевым запросом и пересортировкой на каждый. Теперь висит только один отложенный коммит, новый тап отменяет предыдущий, а сработавший применяется только если реальное состояние правда не совпадает с финальным видимым</div>
             </span>
           </label>
         </li>
@@ -528,8 +553,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Перетаскивание таска на другой день (Week strip) вообще не сохранялось — нашла и починила</span>
-              <div class="item-note">второй, отдельный от «переноса на завтра» баг: drag-and-drop таска на другой день в полоске недели менял только локальное состояние, ни разу не писал в Supabase — выглядело перенесённым, пока следующая пересинхронизация тихо не откатывала обратно. Теперь сохраняется как надо + шлёт то же уведомление</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>второй, отдельный от «переноса на завтра» баг: drag-and-drop таска на другой день в полоске недели менял только локальное состояние, ни разу не писал в Supabase — выглядело перенесённым, пока следующая пересинхронизация тихо не откатывала обратно. Теперь сохраняется как надо + шлёт то же уведомление</div>
             </span>
           </label>
         </li>
@@ -539,8 +564,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Прочесала покрытие уведомлений по прямому запросу</span>
-              <div class="item-note">добавлено: переименование зоны (только если название правда изменилось), удаление зоны, удаление таска, перетаскивание таска (см. выше), личный пинг «X assigned you a task» при СОЗДАНИИ нового таска на кого-то (раньше личный пинг был только при переназначении на редактировании, при создании — только общий тост). Уже было и подтверждено верным: лайк себя самого не уведомляет. Не тронула — не могу проверить без SQL, дублировать рискованно: вступление в дом, выход из дома, удаление участника, передача владения (всё через серверные RPC без исходников в репо — нужен SQL или подтверждение что уже работает)</div>
               <span class="flag">новое, есть открытые вопросы</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>добавлено: переименование зоны (только если название правда изменилось), удаление зоны, удаление таска, перетаскивание таска (см. выше), личный пинг «X assigned you a task» при СОЗДАНИИ нового таска на кого-то (раньше личный пинг был только при переназначении на редактировании, при создании — только общий тост). Уже было и подтверждено верным: лайк себя самого не уведомляет. Не тронула — не могу проверить без SQL, дублировать рискованно: вступление в дом, выход из дома, удаление участника, передача владения (всё через серверные RPC без исходников в репо — нужен SQL или подтверждение что уже работает)</div>
             </span>
           </label>
         </li>
@@ -550,15 +575,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Полный аудит сохранения на сервер по прямому запросу — прошлась по всем ~50 изменяющим функциям</span>
-              <div class="item-note">нашла третий случай той же болезни (после deleteZone и перетаскивания таска сегодня раньше): смена часа начала дня отменяла перенос задачи «на завтра» только локально, без сохранения на сервер. Починила тем же способом. Всё остальное (профиль, галочки/лайки, уведомления, таски, зоны, все auth/household RPC) уже сохраняется правильно — проверено по каждой функции. Специально НЕ считается багом: тема оформления, фильтры (My/Zone), премиум-кэш — это законно локальные вещи, не общие данные</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>нашла третий случай той же болезни (после deleteZone и перетаскивания таска сегодня раньше): смена часа начала дня отменяла перенос задачи «на завтра» только локально, без сохранения на сервер. Починила тем же способом. Всё остальное (профиль, галочки/лайки, уведомления, таски, зоны, все auth/household RPC) уже сохраняется правильно — проверено по каждой функции. Специально НЕ считается багом: тема оформления, фильтры (My/Zone), премиум-кэш — это законно локальные вещи, не общие данные</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Дизайн / контент</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Дизайн / контент</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="ikonka-tabletki-dlya-nabora-zon-zadach">
           <label class="item-label">
@@ -566,8 +595,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Иконка «таблетки» для набора зон/задач</span>
-              <div class="item-note">ещё не нарисована</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>ещё не нарисована</div>
             </span>
           </label>
         </li>
@@ -577,8 +606,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Идеи не-хозяйственных сценариев использования</span>
-              <div class="item-note">открытый брейншторм, ничего не решено</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>открытый брейншторм, ничего не решено</div>
             </span>
           </label>
         </li>
@@ -588,15 +617,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Сезонные иконки для аватарок пользователей</span>
-              <div class="item-note">тыква на Хэллоуин уже есть как обычная эмодзи-аватарка — идея добавить больше сезонных вариантов. Ничего не спроектировано</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>тыква на Хэллоуин уже есть как обычная эмодзи-аватарка — идея добавить больше сезонных вариантов. Ничего не спроектировано</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Бэкапы базы</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Бэкапы базы</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="pervyi-progon-ezhednevnogo-avtobekapa-ne">
           <label class="item-label">
@@ -604,8 +637,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Первый прогон ежедневного автобэкапа — не подтверждён</span>
-              <div class="item-note">облачная задача chorescore-daily-db-backup, каждую ночь в 03:00 по её времени, шлёт zip со всеми таблицами сюда в чат — первый прогон сегодня ночью</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>облачная задача chorescore-daily-db-backup, каждую ночь в 03:00 по её времени, шлёт zip со всеми таблицами сюда в чат — первый прогон сегодня ночью</div>
             </span>
           </label>
         </li>
@@ -615,15 +648,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">DIY-бэкап — это только данные (JSON), не настоящий Postgres-бэкап</span>
-              <div class="item-note">нет point-in-time recovery и точного восстановления схемы/индексов из него; до сегодня бэкапов не было вообще (Free-тариф Supabase, pitr_enabled: false) — реальный вариант это Supabase Pro за $25/мес, выбрали токен вместо оплаты</div>
               <span class="flag">осознанный компромисс</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>нет point-in-time recovery и точного восстановления схемы/индексов из него; до сегодня бэкапов не было вообще (Free-тариф Supabase, pitr_enabled: false) — реальный вариант это Supabase Pro за $25/мес, выбрали токен вместо оплаты</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Офлайн-режим</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Офлайн-режим</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="galki-v-samoletnom-rezhime-vizualno-stav">
           <label class="item-label">
@@ -631,8 +668,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Галки в самолётном режиме визуально ставятся, но не сохраняются</span>
-              <div class="item-note">toggleDone сразу меняет локальное состояние, фоновая запись в Supabase падает без сети, чекбокс не откатывается назад — выглядит выполненным, пока не перезагрузится, и тогда тихо пропадает</div>
               <span class="flag">реальный гэп</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>toggleDone сразу меняет локальное состояние, фоновая запись в Supabase падает без сети, чекбокс не откатывается назад — выглядит выполненным, пока не перезагрузится, и тогда тихо пропадает</div>
             </span>
           </label>
         </li>
@@ -642,8 +679,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Решение выбрано: локальная очередь + инкрементальный RPC вместо перезаписи всего done_on</span>
-              <div class="item-note">как у конкурентов (Todoist/TickTick/OurHome-класс) — local-first с очередью, last-write-wins + аддитивные операции. toggle_task_like уже так устроен, syncDoneOn — нет (перезаписывает весь массив, что при офлайн-очереди рискует затереть чужие завершения)</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>как у конкурентов (Todoist/TickTick/OurHome-класс) — local-first с очередью, last-write-wins + аддитивные операции. toggle_task_like уже так устроен, syncDoneOn — нет (перезаписывает весь массив, что при офлайн-очереди рискует затереть чужие завершения)</div>
             </span>
           </label>
         </li>
@@ -653,8 +690,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Правило начисления очков при офлайн-конфликте — проверено по реальному коду и подтверждено</span>
-              <div class="item-note">если 2 человека оффлайн отметили многоразовый таск по разу — кольцо заполнится и оба получат очко; если оба отметили одноразовый — тоже засчитается обоим. allTimePoints/periodPoints/taskShare проверяют членство в doneBy, не точное совпадение счётчика — работает без доп. кода</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>если 2 человека оффлайн отметили многоразовый таск по разу — кольцо заполнится и оба получат очко; если оба отметили одноразовый — тоже засчитается обоим. allTimePoints/periodPoints/taskShare проверяют членство в doneBy, не точное совпадение счётчика — работает без доп. кода</div>
             </span>
           </label>
         </li>
@@ -664,8 +701,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Локальная очередь + NWPathMonitor + toggleDone переписан — сделано, не проверено вживую</span>
-              <div class="item-note">toggleDone теперь ставит одно из двух действий в очередь (UserDefaults JSON) вместо перезаписи всего done_on; флашится при появлении сети и один раз при холодном запуске</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>toggleDone теперь ставит одно из двух действий в очередь (UserDefaults JSON) вместо перезаписи всего done_on; флашится при появлении сети и один раз при холодном запуске</div>
             </span>
           </label>
         </li>
@@ -675,8 +712,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">SQL для add_task_completion / remove_task_completions_for_date — отправлен, не вставлен в SQL Editor</span>
-              <div class="item-note">типы колонок и стиль сверены напрямую с реальной БД и с уже работающим toggle_task_like, не наугад</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>типы колонок и стиль сверены напрямую с реальной БД и с уже работающим toggle_task_like, не наугад</div>
             </span>
           </label>
         </li>
@@ -686,8 +723,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Индикатор «N изменений не синхронизировано» — не сделан</span>
-              <div class="item-note">пока просто тихо флашится, тост только при настоящей (не сетевой) ошибке — не приоритет, пока основной путь не подтверждён вживую</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>пока просто тихо флашится, тост только при настоящей (не сетевой) ошибке — не приоритет, пока основной путь не подтверждён вживую</div>
             </span>
           </label>
         </li>
@@ -697,8 +734,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Реальный баг в SQL — многоразовые таски не складывались</span>
-              <div class="item-note">add_task_completion читал done_on в переменную, потом отдельно записывал — классическая гонка: если два устройства вызывают почти одновременно, второе может затереть первое вместо сложения. Починено одним атомарным UPDATE. Файл переслан заново, можно вставить поверх старого (CREATE OR REPLACE, безопасно)</div>
               <span class="flag">нашла сама, до прогона</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>add_task_completion читал done_on в переменную, потом отдельно записывал — классическая гонка: если два устройства вызывают почти одновременно, второе может затереть первое вместо сложения. Починено одним атомарным UPDATE. Файл переслан заново, можно вставить поверх старого (CREATE OR REPLACE, безопасно)</div>
             </span>
           </label>
         </li>
@@ -708,15 +745,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">У toggle_task_like (лайки) та же гонка теоретически есть, не тронуто</span>
-              <div class="item-note">ниже риск (не влияет на очки), не проявлялось живьём — просто на заметку</div>
               
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>ниже риск (не влияет на очки), не проявлялось живьём — просто на заметку</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Realtime после сворачивания приложения</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Realtime после сворачивания приложения</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="laiki-ot-drugih-ne-prihodyat-na-telefone">
           <label class="item-label">
@@ -724,15 +765,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Лайки от других не приходят на телефоне, но приходят в симуляторе — найдена причина и починено</span>
-              <div class="item-note">нигде в приложении не было обработки сворачивания/разворачивания (scenePhase) — на реальном телефоне iOS замораживает фоновую сеть при сворачивании, в симуляторе процесс так не замораживается, поэтому баг был невидим там. Теперь при возврате в приложение принудительно переподключает realtime и подгружает данные заново</div>
               <span class="flag">новое</span>
+              <button type="button" class="note-toggle" data-toggle-note>&#9662; заметка</button><div class="item-note" hidden>нигде в приложении не было обработки сворачивания/разворачивания (scenePhase) — на реальном телефоне iOS замораживает фоновую сеть при сворачивании, в симуляторе процесс так не замораживается, поэтому баг был невидим там. Теперь при возврате в приложение принудительно переподключает realtime и подгружает данные заново</div>
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Вход / логин</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Вход / логин</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="obychnyi-vhod-suschestvuyuschim-akkaunto">
           <label class="item-label">
@@ -773,8 +818,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Неверный пароль — только красная рамка, без тоста</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -784,8 +829,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Нет такого аккаунта — красная рамка + тост «No account with that email»</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -795,8 +840,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Запросить код → выйти без пароля → снова Create Account с тем же email — ведёт себя как новая регистрация, без «Email already in use»</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -806,8 +851,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Холодный запуск с реальной сохранённой сессией на плохой сети — тост «Couldn&#x27;t reach the server» через 3 сек, не висит вечно</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -825,7 +870,11 @@
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Уведомления</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Уведомления</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="tochka-na-kolokolchike-gasnet-posle-proc">
           <label class="item-label">
@@ -833,8 +882,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Точка на колокольчике гаснет после прочтения и не загорается снова после перезапуска</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -844,8 +893,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Удалённое уведомление не возвращается после перезапуска (только у себя — другие члены дома его ещё видят)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -855,8 +904,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Иконка прочитанного уведомления серая, непрочитанного — фиолетовая (не всё уведомление тусклое)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -866,8 +915,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Новое уведомление остаётся фиолетовым, пока экран открыт — сереет только когда выходишь с экрана, не в момент открытия</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -877,8 +926,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Уведомления старше 30 дней реально исчезают из базы (не только скрыты у себя)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -888,8 +937,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Новое уведомление (лайк/новый участник/задача) появляется в списке и зажигает точку на колокольчике без выхода-входа на экран</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -918,7 +967,11 @@
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Account (иконка в шапке)</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Account (иконка в шапке)</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="ikonka-otkryvaet-account">
           <label class="item-label">
@@ -937,8 +990,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Смена email — код в 2 шага в одном экране (не ссылка), таймер на повторную отправку, закрытие сбрасывает флоу</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -948,8 +1001,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Смена пароля — реально проверяет текущий пароль (неверный → ошибка именно на этом поле)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -978,7 +1031,11 @@
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Manage Household</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Manage Household</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="sebya-vidno-v-spiske-lyudei-s-metkoi-me">
           <label class="item-label">
@@ -986,8 +1043,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Себя видно в списке людей с меткой «me», заголовок «People in the House»</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1030,8 +1087,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Карточка «я» в списке людей той же высоты, что и остальные (была выше)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1041,15 +1098,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Другой участник присоединился по коду — виден без выхода-входа на экран (realtime)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Join a Different Household</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Join a Different Household</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="tap-join-srazu-pokazyvaet-leave-this-hou">
           <label class="item-label">
@@ -1057,8 +1118,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Тап «Join» сразу показывает «Leave This Household?» (до проверки кода)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1068,8 +1129,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Полный дом — тост «Household is full» после подтверждения</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1079,8 +1140,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Неверный код — тост «Invalid invite code»</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1090,15 +1151,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Кнопка подтверждения называется «Switch», не «Join»</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Зоны</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Зоны</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="menshe-limita-redaktirovanie-kak-obychno">
           <label class="item-label">
@@ -1117,8 +1182,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Добавление 6-й зоны блокируется даже при быстром двойном тапе (проверка теперь и на сервере)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1128,8 +1193,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Зона, добавленная другим участником, появляется без выхода-входа на экран (realtime)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1139,8 +1204,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Зона, удалённая другим участником, пропадает без выхода-входа на экран (realtime)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1150,15 +1215,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Переименование/смена иконки зоны другим участником видна без выхода-входа (realtime)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Задачи — realtime</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Задачи — realtime</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="novaya-zadacha-ot-drugogo-uchastnika-poy">
           <label class="item-label">
@@ -1166,8 +1235,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Новая задача от другого участника появляется без выхода-входа на экран</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1177,8 +1246,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Отметка «сделано» от другого участника видна без выхода-входа (прогресс дня, чекбокс)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1188,8 +1257,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Лайк от другого участника виден без выхода-входа — это то, что раньше выглядело «мгновенным», но по факту не синхронизировалось между устройствами вообще</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1199,8 +1268,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Задача, удалённая/архивированная другим участником, пропадает без выхода-входа</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1210,15 +1279,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Переименование/перенос задачи другим участником виден без выхода-входа</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Мелочи</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Мелочи</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="ikonki-v-shapkah-account-kolokolchik-tro">
           <label class="item-label">
@@ -1259,8 +1332,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Тень тоста в тёмной теме приглушена, не бросается в глаза</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1270,8 +1343,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Кнопки внизу экранов на одном уровне (Email, Password, Person, Task, Zones, Subscription, Join Household — не выше/ниже, чем Account)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1281,8 +1354,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Выбор цвета в профиле (Set Up Your Profile / Edit Person) прячет клавиатуру</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1292,8 +1365,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Клавиатура закрывается по тапу вообще где угодно на экране, не только в пустоте</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1303,8 +1376,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Календарь — переключение на вкладку без подтормаживания</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1314,8 +1387,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Email/Password/Subscription реально анимированно наезжают/уезжают справа (были без анимации)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1325,8 +1398,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Тосты и подписи без лишней точки в конце (кроме Legal-текстов)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1336,8 +1409,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Иконки уведомлений — пересмотреть и поменять</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1347,15 +1420,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Тап вне карточки закрывает открытые кнопки редактировать/удалить — в Manage Household, Manage Zones и Tasks</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Покупки · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Покупки · 💎 premium-акк</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="monthly-podpiska">
           <label class="item-label">
@@ -1385,8 +1462,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Lifetime ($24.99)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1396,8 +1473,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Restore Purchase для всех трёх, особенно Lifetime</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1407,8 +1484,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Supabase → people → is_premium стало true после покупки</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1429,8 +1506,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Купить Monthly, потом сразу Annual (или наоборот) — апгрейд/смена плана проходит нормально, не задваивается</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1440,15 +1517,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Купить на одном устройстве, открыть тот же аккаунт на другом — премиум подтягивается там тоже</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Manage Household (premium) · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Manage Household (premium) · 💎 premium-акк</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="invait-kod-na-premium-dome-pozvolyaet-do">
           <label class="item-label">
@@ -1467,8 +1548,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">На premium-доме (лимит 10) два человека одновременно жмут Join с последним свободным местом — дом не превышает 10, даже если оба тапнули почти одновременно</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1478,8 +1559,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Владелец выходит → владение переходит следующему по дате</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1489,15 +1570,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Задача ушедшего участника: открыть → пикер людей пустой (не выбран автоматически) → Save с одним оставшимся в доме назначает на него, с несколькими — требует явно выбрать (на premium-доме людей больше 2, проверить ветку с выбором из нескольких)</span>
-              
               <span class="flag">подтверждено на free</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Зоны (после того как был premium) · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Зоны (после того как был premium) · 💎 premium-акк</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="bolshe-5-zon-dom-upal-obratno-na-free-pe">
           <label class="item-label">
@@ -1505,8 +1590,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Больше 5 зон, дом упал обратно на free — первые 5 зон редактируемые, шестая+ — только удаление</span>
-              
               <span class="flag">поправлено</span>
+              
             </span>
           </label>
         </li>
@@ -1516,15 +1601,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">На активном premium — добавление 6-й, 7-й, 10-й зоны проходит без блокировки и без баннера</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>После отмены подписки · 💎 premium-акк</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>После отмены подписки · 💎 premium-акк</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="srazu-posle-cancel-subscription-premium">
           <label class="item-label">
@@ -1565,8 +1654,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">people.is_premium в Supabase НЕ откатывается сам после истечения — известный незакрытый гэп, просто подтвердить что воспроизводится как в бэклоге</span>
-              
               <span class="flag">известный гэп</span>
+              
             </span>
           </label>
         </li>
@@ -1584,7 +1673,11 @@
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Realtime — общие сценарии</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Realtime — общие сценарии</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="svernut-prilozhenie-na-minutu-chto-to-po">
           <label class="item-label">
@@ -1592,8 +1685,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Свернуть приложение на минуту, что-то поменять с другого устройства, вернуться — изменение уже видно, не нужно перезаходить</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1603,8 +1696,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Кратко выключить wifi/интернет, включить обратно — realtime сам переподключается, без перезапуска приложения</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1614,8 +1707,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">После Switch/Leave/Join в другой дом — изменения из СТАРОГО дома больше не долетают (подписка реально переключилась, не задвоилась)</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1625,8 +1718,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Sign Out → Sign In другим аккаунтом на этом же устройстве — не видно чужих realtime-обновлений от предыдущего аккаунта</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1636,15 +1729,19 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Быстро добавить/изменить несколько вещей подряд (3+ задачи за секунду) — итоговое состояние на другом устройстве корректное, ничего не потерялось</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Гонки и края — дом и зоны</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Гонки и края — дом и зоны</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="dva-cheloveka-odnovremenno-zhmut-join-na">
           <label class="item-label">
@@ -1652,8 +1749,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Два человека одновременно жмут Join на инвайт-код с последним свободным местом — проходит только один, второй видит «Household is full»</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1663,8 +1760,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Владелец, единственный в доме, удаляет свой аккаунт — не остаётся висящего битого дома</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1685,8 +1782,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Владелец сбрасывает инвайт-код прямо в момент, когда кто-то вводит старый код — тот получает «Invalid invite code», не зависает</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1704,7 +1801,11 @@
       </ul>
     </section>
     <section class="card">
-      <div class="card-head"><h2>Края — задачи и данные</h2><span class="card-count"></span></div>
+      <div class="card-head" data-toggle-section>
+        <span class="chevron">&#9662;</span>
+        <h2>Края — задачи и данные</h2>
+        <span class="card-count"></span>
+      </div>
       <ul class="items">
         <li class="item" data-id="vypolnenie-perenos-zadachi-rovno-v-momen">
           <label class="item-label">
@@ -1712,8 +1813,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Выполнение/перенос задачи ровно в момент смены часа Day Start — засчитывается на правильный день</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1745,8 +1846,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Force-quit приложения сразу после Save (задача/зона/профиль) — при следующем запуске данные не битые</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1756,8 +1857,8 @@
             <span class="box"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="item-body">
               <span class="item-text">Полный Airplane Mode (не только Wi-Fi офф) — приложение не крашит, показывает разумные тосты вместо зависания</span>
-              
               <span class="flag">впервые</span>
+              
             </span>
           </label>
         </li>
@@ -1838,6 +1939,32 @@
     if (!e.target || !e.target.classList.contains("cb")) return;
     updateProgress();
     saveChecked(e.target.dataset.id, e.target.checked);
+  });
+
+  // Collapse/expand is pure per-browser UI preference, not shared data —
+  // plain localStorage is fine here (unlike checked-state, nothing bad
+  // happens if this doesn't survive a browser reset, it's just a fold
+  // state).
+  let collapsedSections = {};
+  try { collapsedSections = JSON.parse(localStorage.getItem("chorescore-backlog-collapsed") || "{}"); } catch (e) {}
+  document.querySelectorAll("[data-toggle-section]").forEach((head, i) => {
+    const card = head.closest("section.card");
+    if (collapsedSections[i]) card.classList.add("collapsed");
+    head.addEventListener("click", () => {
+      const isCollapsed = card.classList.toggle("collapsed");
+      collapsedSections[i] = isCollapsed;
+      try { localStorage.setItem("chorescore-backlog-collapsed", JSON.stringify(collapsedSections)); } catch (e) {}
+    });
+  });
+
+  document.querySelectorAll("[data-toggle-note]").forEach((btn) => {
+    const note = btn.nextElementSibling;
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const nowHidden = note.hidden = !note.hidden;
+      btn.innerHTML = (nowHidden ? "&#9662;" : "&#9652;") + " заметка";
+    });
   });
 
   loadCheckedState();
