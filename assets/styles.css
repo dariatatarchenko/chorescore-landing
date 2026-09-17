@@ -205,6 +205,8 @@ nav.site-nav .wrap {
   height: 80px;
 }
 
+.hero-cta a, .fc-text a { outline: none; }
+
 .hero-cta .fine-print { font-size: 13px; color: var(--text3); }
 
 .sparkle {
